@@ -1,0 +1,148 @@
+ARM GAS  /tmp/ccfBjRKM.s 			page 1
+
+
+   1              	# 1 "forth.S"
+   1              	/*****************************************************************************
+   1              	...
+   0              	
+   0              	
+   2              	fortharm  forth for arm cortex m0 (LPC1114)
+   3              	copyright(c) 2013 William R Cooke
+   4              	*/
+   5              	
+   6              	#include "defines.h"
+   1              	/*****************************************************************************
+   2              	fortharm  forth for arm cortex m0 (LPC1114)
+   3              	copyright(c) 2013 William R Cooke
+   4              	*/
+   5              	
+   6              		.thumb 
+   7              	
+   8              	#define PSP     sp
+   9              	#define RSP     r7
+  10              	#define IR      r6
+  11              	#define WA      r5
+  12              	#define CA      r4
+  13              	#define TOS     r3
+  14              	#define SCR0    r1
+  15              	#define SCR1    r2
+  16              	#define SCR2    r0
+  17              	
+  18              	#define SCR3    r8
+  19              	#define SCR4    r9
+  20              	#define SCR5    r10
+  21              	
+  22              	
+  23              	#define IMM     (1<<7)
+  24              	...
+   7              	
+   8              	        
+   9              		.data
+  10              	
+  11              	
+  12              		.bss
+  13              	        @ system variables
+  14              	
+  15              	        @ word vars first
+  16              	        .globl  sys_base
+  17              	        .globl  sys_here
+  18              	        .globl  sys_state
+  19              	sys_base:       .word
+  20              	sys_here:       .word
+  21              	sys_state:      .word
+  22              	        @ halfword vars
+  23              	
+  24              	
+  25              	        @ byte vars
+  26              	sys_tib:        .byte
+  27              		
+  28              		.text
+  29              		.balign 4
+ARM GAS  /tmp/ccfBjRKM.s 			page 2
+
+
+  30              		.syntax unified
+  31              		.thumb
+  32              		.thumb_func
+  33              		.global forth
+  34              	
+  35              	        @ some handy constants
+  36              	        @ put them here for easy access
+  37              	        
+  38              	forth:
+  39 0000 00B5     	        push {lr}
+  40 0002 0146     	        mov r1,r0
+  41 0004 0044     	        add r0,r0               ;
+  42 0006 0844     	        add r0,r1
+  43 0008 00BD     	        pop {pc}
+  44              	
+  45              	
+  46              	forth_start:
+  47 000a 0A20     	        movs    r0,#10          @ set base
+  48 000c 0749     	        ldr     r1, =sys_base
+  49 000e 0860     	        str     r0, [r1, 0]
+  50              	        
+  51              	        
+  52              	
+  53              	forth_restart:  
+  54              	
+  55              	
+  56              	
+  57              	
+  58              	        @ put outer interp address in IR
+  59              	
+  60              	        @ and jump to inner interp
+  61 0010 FEE7     	        b       next
+  62              	
+  63              	        
+  64              		.globl inner_interp
+  65              		.globl  semi
+  66              		.globl  next
+  67              		
+  68              	inner_interp:
+  69 0012 17000000 	semi:	.word   . + 5
+  70 0016 3E68     		ldr     IR, [RSP]
+  71 0018 0437     		adds    RSP, #4
+  72              		
+  73              	
+  74              	
+  75 001a 3568     	next:   ldr     WA, [IR]
+  76 001c 0436     		adds    IR, #4
+  77              		
+  78              	
+  79 001e 2C68     	run:	ldr     CA, [WA]
+  80 0020 0435     		adds    WA, #4
+  81 0022 2047     		bx      CA
+  82              	
+  83              	
+  84              	do_colon:
+  85 0024 3E60     		str     IR, [RSP]
+  86 0026 2E46     		mov     IR, WA
+ARM GAS  /tmp/ccfBjRKM.s 			page 3
+
+
+  87 0028 FEE70000 		b       next...
+  87      00000000 
+ARM GAS  /tmp/ccfBjRKM.s 			page 4
+
+
+DEFINED SYMBOLS
+             forth.S:19     .bss:00000000 sys_base
+             forth.S:20     .bss:00000000 sys_here
+             forth.S:21     .bss:00000000 sys_state
+             forth.S:26     .bss:00000000 sys_tib
+             forth.S:29     .text:00000000 $t
+             forth.S:38     .text:00000000 forth
+             forth.S:46     .text:0000000a forth_start
+             forth.S:53     .text:00000010 forth_restart
+             forth.S:75     .text:0000001a next
+             forth.S:68     .text:00000012 inner_interp
+             forth.S:69     .text:00000012 semi
+             forth.S:69     .text:00000012 $d
+             forth.S:70     .text:00000016 $t
+             forth.S:79     .text:0000001e run
+             forth.S:84     .text:00000024 do_colon
+             forth.S:87     .text:0000002a $d
+             forth.S:87     .text:0000002c $d
+
+NO UNDEFINED SYMBOLS

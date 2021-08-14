@@ -1,0 +1,223 @@
+
+out/fortharm.elf:     file format elf32-littlearm
+out/fortharm.elf
+architecture: arm, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x000000f1
+
+Program Header:
+    LOAD off    0x00008000 vaddr 0x00000000 paddr 0x00000000 align 2**15
+         filesz 0x00000f60 memsz 0x00000f60 flags r-x
+    LOAD off    0x00010000 vaddr 0x10000000 paddr 0x00000f60 align 2**15
+         filesz 0x00000004 memsz 0x00000004 flags rw-
+    LOAD off    0x00010004 vaddr 0x10000004 paddr 0x10000004 align 2**15
+         filesz 0x00000000 memsz 0x000005a4 flags rw-
+private flags = 5000002: [Version5 EABI] [has entry point]
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000f60  00000000  00000000  00008000  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000004  10000000  00000f60  00010000  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          000000a0  10000004  10000004  00010004  2**2
+                  ALLOC
+  3 .stack        00000504  100000a4  100000a4  00010004  2**0
+                  ALLOC
+  4 .debug_aranges 000003f8  00000000  00000000  00010008  2**3
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00004d71  00000000  00000000  00010400  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000da6  00000000  00000000  00015171  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000207a  00000000  00000000  00015f17  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000c6c  00000000  00000000  00017f94  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00009331  00000000  00000000  00018c00  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000011fc  00000000  00000000  00021f31  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .ARM.attributes 0000002d  00000000  00000000  0002312d  2**0
+                  CONTENTS, READONLY
+ 12 .debug_ranges 000002f8  00000000  00000000  0002315a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_macro  000024aa  00000000  00000000  00023452  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 14 .comment      00000070  00000000  00000000  000258fc  2**0
+                  CONTENTS, READONLY
+SYMBOL TABLE:
+00000000 l    d  .text	00000000 .text
+10000000 l    d  .data	00000000 .data
+10000004 l    d  .bss	00000000 .bss
+100000a4 l    d  .stack	00000000 .stack
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_frame	00000000 .debug_frame
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    d  .debug_loc	00000000 .debug_loc
+00000000 l    d  .ARM.attributes	00000000 .ARM.attributes
+00000000 l    d  .debug_ranges	00000000 .debug_ranges
+00000000 l    d  .debug_macro	00000000 .debug_macro
+00000000 l    d  .comment	00000000 .comment
+00000000 l    df *ABS*	00000000 vectors.c
+00000ce0 l     F .text	00000006 __Default_Handler
+000000ca l       .text	00000000 forth_start
+000000d0 l       .text	00000000 forth_restart
+000000de l       .text	00000000 run
+000000e4 l       .text	00000000 do_colon
+00000000 l    df *ABS*	00000000 main.c
+10000004 l     O .bss	00000004 distance_mm
+10000008 l     O .bss	00000001 is_falling.5742
+1000000c l     O .bss	00000004 capture_falling.5741
+10000010 l     O .bss	00000004 capture_rising.5740
+00000000 l    df *ABS*	00000000 nonstdio.c
+10000014 l     O .bss	00000020 buff
+00000f38 l     O .text	00000011 hex_chars
+00000000 l    df *ABS*	00000000 systick.c
+10000034 l     O .bss	00000004 ticks
+10000038 l     O .bss	00000004 ms_per_irq
+1000003c l     O .bss	00000004 milliseconds
+10000040 l     O .bss	00000004 milliseconds_high
+10000044 l     O .bss	00000004 Timers
+10000048 l     O .bss	00000001 Num_timers
+00000000 l    df *ABS*	00000000 timers.c
+00000754 l     F .text	0000002c NVIC_EnableIRQ
+00000000 l    df *ABS*	00000000 uart.c
+00000a18 l     F .text	0000002c NVIC_EnableIRQ
+10000049 l     O .bss	00000001 Rx_buf_size
+1000004c l     O .bss	00000004 Rx_buf
+10000050 l     O .bss	00000001 Rx_head
+10000051 l     O .bss	00000001 Rx_tail
+00000000 l    df *ABS*	00000000 LPC11xx.c
+00000000 l    df *ABS*	00000000 system_LPC11xx.c
+00000e98 l       .text	00000000 .udivsi3_skip_div0_test
+00000000 l    df *ABS*	00000000 syscall.c
+00000000 l    df *ABS*	00000000 testcalls.c
+00000000 l    df *ABS*	00000000 reent.c
+00000000 l    df *ABS*	00000000 mallocr.c
+00000000 l    df *ABS*	00000000 mallocr.c
+00000000 l    df *ABS*	00000000 mlock.c
+10000000 g       *ABS*	00000000 __ram_start
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_11_IRQHandler
+00000ce0  w    F .text	00000006 TIMER16_0_IRQHandler
+10000054 g     O .bss	00000030 my_timers
+10001000 g       *ABS*	00000000 __ram_end
+00000ce0  w    F .text	00000006 HardFault_Handler
+00000e14 g     F .text	00000068 Flash_Set_Access_Clocks
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_3_IRQHandler
+00000ce8 g     F .text	000000e0 PLL_Set_Registers
+000005e8 g     F .text	0000016c SysTick_Handler
+0000012c g     F .text	00000000 __default_low_level_init
+00000ce0  w    F .text	00000006 __Reserved_0x1C_Handler
+00000ce0  w    F .text	00000006 PendSV_Handler
+00000f60 g       *ABS*	00000000 __exidx_end
+00000bcc g     F .text	000000a0 UART_IRQHandler
+00000c6c g     F .text	00000074 serial_init_irq
+0000099c g     F .text	0000007c capture_init
+00000ce0  w    F .text	00000006 TIMER32_0_IRQHandler
+00000000 g       .text	00000000 __text_start
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_10_IRQHandler
+0000042c g     F .text	00000014 print_newline
+00000500 g     F .text	00000070 systick_set_timer
+00000ce0  w    F .text	00000006 TIMER32_1_IRQHandler
+100005a8 g       .stack	00000000 __process_stack_end
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_8_IRQHandler
+00000ce0  w    F .text	00000006 __Reserved_0x20_Handler
+00000f60 g       .text	00000000 __fini_array_end
+10000000 g     O .data	00000004 SystemCoreClock
+00000000         *UND*	00000000 store
+00000e94 g     F .text	00000088 __udivsi3
+100001a8 g       .stack	00000000 __process_stack_start
+0000017c g     F .text	00000020 blinky
+00000f60 g       *ABS*	00000000 __data_init_start
+00000ce0  w    F .text	00000006 __Reserved_0x10_Handler
+00000ce0  w    F .text	00000006 PIOINT1_IRQHandler
+00000ce0  w    F .text	00000006 CAN_IRQHandler
+00000ce0  w    F .text	00000006 SSP0_IRQHandler
+00000f60 g       *ABS*	00000000 __exidx_start
+00008000 g       *ABS*	00000000 __rom_end
+100001a8 g       .stack	00000000 __main_stack_end
+100000a4 g       .bss	00000000 __bss_end
+000000f0 g     F .text	00000000 Reset_Handler
+100000a8 g       .stack	00000000 __stack_start
+10000004 g       .bss	00000000 sys_here
+00000780 g     F .text	000001a8 pwm_init
+0000039c g     F .text	00000058 print_uint
+00000ce0  w    F .text	00000006 __Reserved_0x34_Handler
+00000570 g     F .text	00000040 systick_get_timer
+00000ce0  w    F .text	00000006 __Reserved_0x30_Handler
+10000004 g       .bss	00000000 sys_base
+00000154 g     F .text	00000028 systick_wait
+0000019c g     F .text	00000074 TIMER16_1_IRQHandler
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_7_IRQHandler
+00000400 g       *ABS*	00000000 __process_stack_size
+000000c0 g     F .text	00000000 forth
+0000012c  w    F .text	00000000 low_level_init_1
+00008000 g       *ABS*	00000000 __rom_size
+00000ce0  w    F .text	00000006 ADC_IRQHandler
+00000440 g     F .text	000000c0 systick_init
+10000004 g       .data	00000000 __data_end
+00000ce0  w    F .text	00000006 SSP1_IRQHandler
+00000ce0  w    F .text	00000006 PIOINT2_IRQHandler
+00000ce0  w    F .text	00000006 __Reserved_0x18_Handler
+00000ce0  w    F .text	00000006 __Reserved_0x28_Handler
+00000f30  w    F .text	00000002 __aeabi_ldiv0
+100005a8 g       .stack	00000000 __stack_end
+00000ce0  w    F .text	00000006 BOD_IRQHandler
+00000f60 g       .text	00000000 __text_end
+000000d2 g       .text	00000000 semi
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_2_IRQHandler
+00000ce0  w    F .text	00000006 __Reserved_0x08_Handler
+00000f60 g       .text	00000000 __fini_array_start
+00000ce0  w    F .text	00000006 PIOINT0_IRQHandler
+10000084 g     O .bss	00000020 rx_buf
+10000004 g       .bss	00000000 __bss_start
+00000ce0  w    F .text	00000006 I2C_IRQHandler
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_9_IRQHandler
+00000210 g     F .text	0000018c main
+000005b0 g     F .text	00000038 systick_set_callback
+00000ce0  w    F .text	00000006 __Reserved_0x24_Handler
+00000ce0  w    F .text	00000006 WDT_IRQHandler
+000000d2 g       .text	00000000 inner_interp
+00000e94 g     F .text	00000000 __aeabi_uidiv
+00000ce0  w    F .text	00000006 SVC_Handler
+100000a8 g       .stack	00000000 __main_stack_start
+00000f60 g       .text	00000000 __init_array_end
+00000ce0  w    F .text	00000006 __Reserved_0xAC_Handler
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_5_IRQHandler
+00000ce0  w    F .text	00000006 __Reserved_0x14_Handler
+10001000 g       *ABS*	00000000 __heap_end
+00000a44 g     F .text	0000015c serial_init
+00000ce0  w    F .text	00000006 __Reserved_0x9C_Handler
+00001000 g       *ABS*	00000000 __ram_size
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_1_IRQHandler
+00000ce0  w    F .text	00000006 __Reserved_0x98_Handler
+000000da g       .text	00000000 next
+00000f60 g       .text	00000000 __preinit_array_end
+00000928 g     F .text	00000074 pwm_set
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_0_IRQHandler
+100005a8 g       *ABS*	00000000 __heap_start
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_6_IRQHandler
+00000f1c g     F .text	00000012 __aeabi_uidivmod
+00000000 g       *ABS*	00000000 __rom_start
+00000ce0  w    F .text	00000006 WAKEUP_PIO0_4_IRQHandler
+00000ba0 g     F .text	0000002c serial_send
+000003f4 g     F .text	00000036 print_string
+00000000         *UND*	00000000 _end
+0000012c  w    F .text	00000000 low_level_init_0
+00000dc8 g     F .text	0000004c MAINCLK_Set_Source
+00000e7c g     F .text	00000018 SystemCoreClockUpdate
+00000100 g       *ABS*	00000000 __main_stack_size
+00000ce0  w    F .text	00000006 WAKEUP_PIO1_0_IRQHandler
+00000f60 g       .text	00000000 __init_array_start
+00000f30  w    F .text	00000002 __aeabi_idiv0
+00000ce0  w    F .text	00000006 PIOINT3_IRQHandler
+00000000 g     O .text	000000c0 vectors
+10000000 g       .data	00000000 __data_start
+00000f60 g       .text	00000000 __preinit_array_start
+10000004 g       .bss	00000000 sys_state
+
+

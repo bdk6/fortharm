@@ -1,0 +1,1299 @@
+Archive member included to satisfy reference by file (symbol)
+
+/opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+                              out/nonstdio.o (__aeabi_uidiv)
+/opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+                              /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+/opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+                              out/syscall.o (errno)
+/opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+                              /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o) (_free_r)
+/opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+                              /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o) (_impure_ptr)
+/opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                              /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o) (__malloc_current_mallinfo)
+/opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+                              /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o) (__malloc_lock)
+
+Allocating common symbols
+Common symbol       size              file
+
+my_timers           0x30              out/main.o
+errno               0x4               /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+rx_buf              0x20              out/main.o
+gl                  0x4               out/testcalls.o
+
+Discarded input sections
+
+ .data          0x00000000        0x0 out/forth.o
+ .text          0x00000000      0x8cc out/dictionary.o
+ .data          0x00000000        0x0 out/dictionary.o
+ .bss           0x00000000        0x0 out/dictionary.o
+ .text          0x00000000       0x24 out/core_extensions.o
+ .data          0x00000000        0x0 out/core_extensions.o
+ .bss           0x00000000        0x0 out/core_extensions.o
+ .text          0x00000000        0x0 out/interface.o
+ .data          0x00000000        0x0 out/interface.o
+ .bss           0x00000000        0x0 out/interface.o
+ .data          0x00000000        0x0 out/startup.o
+ .bss           0x00000000        0x0 out/startup.o
+ .isr_vector    0x00000000       0x44 out/startup.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .group         0x00000000        0x8 out/syscall.o
+ .text          0x00000000        0x0 out/syscall.o
+ .data          0x00000000        0x0 out/syscall.o
+ .bss           0x00000000        0x0 out/syscall.o
+ .text.close    0x00000000       0x18 out/syscall.o
+ .text._close_r
+                0x00000000       0x14 out/syscall.o
+ .bss.__env     0x00000000        0x4 out/syscall.o
+ .data.environ  0x00000000        0x4 out/syscall.o
+ .text.execve   0x00000000       0x24 out/syscall.o
+ .text.fork     0x00000000       0x18 out/syscall.o
+ .text._fork_r  0x00000000       0x14 out/syscall.o
+ .text.fstat    0x00000000       0x24 out/syscall.o
+ .text.getpid   0x00000000        0xc out/syscall.o
+ .text.isatty   0x00000000       0x18 out/syscall.o
+ .text._isatty_r
+                0x00000000       0x14 out/syscall.o
+ .text.kill     0x00000000       0x20 out/syscall.o
+ .text.link     0x00000000       0x20 out/syscall.o
+ .text._link_r  0x00000000       0x18 out/syscall.o
+ .text.lseek    0x00000000       0x18 out/syscall.o
+ .text._lseek_r
+                0x00000000       0x20 out/syscall.o
+ .text.open     0x00000000       0x18 out/syscall.o
+ .text._open_r  0x00000000       0x18 out/syscall.o
+ .text.read     0x00000000       0x1c out/syscall.o
+ .text._read_r  0x00000000       0x18 out/syscall.o
+ .text.sbrk     0x00000000       0x3c out/syscall.o
+ .text._sbrk_r  0x00000000       0x14 out/syscall.o
+ .text.stat     0x00000000       0x1c out/syscall.o
+ .text._stat_r  0x00000000       0x18 out/syscall.o
+ .text._fstat_r
+                0x00000000       0x18 out/syscall.o
+ .text.times    0x00000000       0x14 out/syscall.o
+ .text.unlink   0x00000000       0x20 out/syscall.o
+ .text._unlink_r
+                0x00000000       0x18 out/syscall.o
+ .text.wait     0x00000000       0x20 out/syscall.o
+ .text._wait_r  0x00000000       0x18 out/syscall.o
+ .text.write    0x00000000       0x3c out/syscall.o
+ .text._write_r
+                0x00000000       0x28 out/syscall.o
+ .bss.heap_end.4468
+                0x00000000        0x4 out/syscall.o
+ .group         0x00000000        0x8 out/nonstdio.o
+ .group         0x00000000        0x8 out/nonstdio.o
+ .group         0x00000000        0x8 out/nonstdio.o
+ .group         0x00000000        0x8 out/nonstdio.o
+ .group         0x00000000        0x8 out/nonstdio.o
+ .group         0x00000000        0x8 out/nonstdio.o
+ .text          0x00000000        0x0 out/nonstdio.o
+ .data          0x00000000        0x0 out/nonstdio.o
+ .bss           0x00000000        0x0 out/nonstdio.o
+ .text.print_int
+                0x00000000       0x28 out/nonstdio.o
+ .text.print_char
+                0x00000000       0x1c out/nonstdio.o
+ .text.print_hex
+                0x00000000       0x54 out/nonstdio.o
+ .text.read_char
+                0x00000000       0x14 out/nonstdio.o
+ .text.read_line
+                0x00000000       0x14 out/nonstdio.o
+ .text.read_string
+                0x00000000       0x14 out/nonstdio.o
+ .text.unread_char
+                0x00000000       0x14 out/nonstdio.o
+ .text.set_io_functions
+                0x00000000        0x8 out/nonstdio.o
+ .debug_macro   0x00000000      0x7e4 out/nonstdio.o
+ .debug_macro   0x00000000       0x3a out/nonstdio.o
+ .debug_macro   0x00000000       0x10 out/nonstdio.o
+ .debug_macro   0x00000000       0x2e out/nonstdio.o
+ .debug_macro   0x00000000       0xa3 out/nonstdio.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .group         0x00000000        0x8 out/main.o
+ .text          0x00000000        0x0 out/main.o
+ .data          0x00000000        0x0 out/main.o
+ .bss           0x00000000        0x0 out/main.o
+ .data.msg      0x00000000       0x20 out/main.o
+ .text.sound_set
+                0x00000000       0x30 out/main.o
+ .debug_macro   0x00000000      0x7e4 out/main.o
+ .debug_macro   0x00000000       0x3a out/main.o
+ .debug_macro   0x00000000       0x10 out/main.o
+ .debug_macro   0x00000000       0x2e out/main.o
+ .debug_macro   0x00000000       0xa3 out/main.o
+ .debug_macro   0x00000000      0x20e out/main.o
+ .debug_macro   0x00000000       0x89 out/main.o
+ .debug_macro   0x00000000       0x3a out/main.o
+ .debug_macro   0x00000000       0x52 out/main.o
+ .debug_macro   0x00000000       0x19 out/main.o
+ .debug_macro   0x00000000      0x16d out/main.o
+ .debug_macro   0x00000000       0x10 out/main.o
+ .debug_macro   0x00000000       0xf5 out/main.o
+ .debug_macro   0x00000000       0x22 out/main.o
+ .debug_macro   0x00000000       0x91 out/main.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .group         0x00000000        0x8 out/timers.o
+ .text          0x00000000        0x0 out/timers.o
+ .data          0x00000000        0x0 out/timers.o
+ .bss           0x00000000        0x0 out/timers.o
+ .text.get_capture
+                0x00000000       0x10 out/timers.o
+ .debug_macro   0x00000000      0x7e4 out/timers.o
+ .debug_macro   0x00000000       0x3a out/timers.o
+ .debug_macro   0x00000000       0x10 out/timers.o
+ .debug_macro   0x00000000       0x2e out/timers.o
+ .debug_macro   0x00000000       0xa3 out/timers.o
+ .debug_macro   0x00000000      0x20e out/timers.o
+ .debug_macro   0x00000000       0x28 out/timers.o
+ .debug_macro   0x00000000       0x3a out/timers.o
+ .debug_macro   0x00000000      0x241 out/timers.o
+ .debug_macro   0x00000000      0x567 out/timers.o
+ .group         0x00000000        0x8 out/testcalls.o
+ .text          0x00000000        0x0 out/testcalls.o
+ .data          0x00000000        0x0 out/testcalls.o
+ .bss           0x00000000        0x0 out/testcalls.o
+ .text.f        0x00000000        0xc out/testcalls.o
+ .text.g        0x00000000       0x18 out/testcalls.o
+ .text.h        0x00000000       0x20 out/testcalls.o
+ .text.i        0x00000000       0x54 out/testcalls.o
+ .text.main2    0x00000000       0x58 out/testcalls.o
+ .debug_macro   0x00000000      0x7e4 out/testcalls.o
+ COMMON         0x00000000        0x4 out/testcalls.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .group         0x00000000        0x8 out/uart.o
+ .text          0x00000000        0x0 out/uart.o
+ .data          0x00000000        0x0 out/uart.o
+ .bss           0x00000000        0x0 out/uart.o
+ .text.NVIC_DisableIRQ
+                0x00000000       0x30 out/uart.o
+ .bss.tx_head   0x00000000        0x1 out/uart.o
+ .bss.tx_tail   0x00000000        0x1 out/uart.o
+ .text.serial_receive
+                0x00000000       0x38 out/uart.o
+ .text.serial_send_irq
+                0x00000000       0x2c out/uart.o
+ .text.serial_receive_irq
+                0x00000000       0x90 out/uart.o
+ .debug_macro   0x00000000      0x7e4 out/uart.o
+ .debug_macro   0x00000000       0x3a out/uart.o
+ .debug_macro   0x00000000       0x10 out/uart.o
+ .debug_macro   0x00000000       0x2e out/uart.o
+ .debug_macro   0x00000000       0xa3 out/uart.o
+ .debug_macro   0x00000000      0x20e out/uart.o
+ .debug_macro   0x00000000       0x28 out/uart.o
+ .debug_macro   0x00000000       0x3a out/uart.o
+ .debug_macro   0x00000000      0x241 out/uart.o
+ .debug_macro   0x00000000      0x567 out/uart.o
+ .group         0x00000000        0x8 out/vectors.o
+ .text          0x00000000        0x0 out/vectors.o
+ .data          0x00000000        0x0 out/vectors.o
+ .bss           0x00000000        0x0 out/vectors.o
+ .debug_macro   0x00000000      0x7e4 out/vectors.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .group         0x00000000        0x8 out/systick.o
+ .text          0x00000000        0x0 out/systick.o
+ .data          0x00000000        0x0 out/systick.o
+ .bss           0x00000000        0x0 out/systick.o
+ .text.NVIC_EnableIRQ
+                0x00000000       0x2c out/systick.o
+ .text.NVIC_DisableIRQ
+                0x00000000       0x30 out/systick.o
+ .text.systick_get_ticks
+                0x00000000       0x14 out/systick.o
+ .text.systick_get_milliseconds
+                0x00000000       0x14 out/systick.o
+ .text.systick_get_milliseconds_long
+                0x00000000       0x5c out/systick.o
+ .debug_macro   0x00000000      0x7e4 out/systick.o
+ .debug_macro   0x00000000       0x3a out/systick.o
+ .debug_macro   0x00000000       0x10 out/systick.o
+ .debug_macro   0x00000000       0x2e out/systick.o
+ .debug_macro   0x00000000       0xa3 out/systick.o
+ .debug_macro   0x00000000      0x20e out/systick.o
+ .debug_macro   0x00000000       0x28 out/systick.o
+ .debug_macro   0x00000000       0x3a out/systick.o
+ .debug_macro   0x00000000      0x241 out/systick.o
+ .debug_macro   0x00000000      0x567 out/systick.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/system_LPC11xx.o
+ .text          0x00000000        0x0 out/system_LPC11xx.o
+ .data          0x00000000        0x0 out/system_LPC11xx.o
+ .bss           0x00000000        0x0 out/system_LPC11xx.o
+ .debug_macro   0x00000000      0x7e4 out/system_LPC11xx.o
+ .debug_macro   0x00000000       0x3a out/system_LPC11xx.o
+ .debug_macro   0x00000000       0x10 out/system_LPC11xx.o
+ .debug_macro   0x00000000       0x2e out/system_LPC11xx.o
+ .debug_macro   0x00000000       0xa3 out/system_LPC11xx.o
+ .debug_macro   0x00000000      0x20e out/system_LPC11xx.o
+ .debug_macro   0x00000000       0x28 out/system_LPC11xx.o
+ .debug_macro   0x00000000       0x3a out/system_LPC11xx.o
+ .debug_macro   0x00000000      0x241 out/system_LPC11xx.o
+ .debug_macro   0x00000000      0x567 out/system_LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .group         0x00000000        0x8 out/LPC11xx.o
+ .text          0x00000000        0x0 out/LPC11xx.o
+ .data          0x00000000        0x0 out/LPC11xx.o
+ .bss           0x00000000        0x0 out/LPC11xx.o
+ .text.PLL_Set_Frequency
+                0x00000000       0x50 out/LPC11xx.o
+ .text.GPIO_Init
+                0x00000000        0x8 out/LPC11xx.o
+ .text.ADC_EnableIRQ
+                0x00000000       0x1c out/LPC11xx.o
+ .text.ADC_Select_Channels
+                0x00000000       0x2c out/LPC11xx.o
+ .debug_macro   0x00000000      0x7e4 out/LPC11xx.o
+ .debug_macro   0x00000000       0x3a out/LPC11xx.o
+ .debug_macro   0x00000000       0x10 out/LPC11xx.o
+ .debug_macro   0x00000000       0x2e out/LPC11xx.o
+ .debug_macro   0x00000000       0xa3 out/LPC11xx.o
+ .debug_macro   0x00000000      0x20e out/LPC11xx.o
+ .debug_macro   0x00000000       0x28 out/LPC11xx.o
+ .debug_macro   0x00000000       0x3a out/LPC11xx.o
+ .debug_macro   0x00000000      0x241 out/LPC11xx.o
+ .debug_macro   0x00000000      0x567 out/LPC11xx.o
+ .data          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+ .bss           0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+ .data          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+ .bss           0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+ .text          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+ .data          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+ .bss           0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+ .text.cleanup_glue
+                0x00000000       0x1c /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+ .text._reclaim_reent
+                0x00000000       0x94 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+ COMMON         0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+ .text          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+ .data          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+ .bss           0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+ .text._malloc_trim_r
+                0x00000000       0xa0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+ .text._free_r  0x00000000      0x1c4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+ .text          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+ .data          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+ .bss           0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+ .data.impure_data
+                0x00000000      0x428 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+ .data._impure_ptr
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+ .rodata._global_impure_ptr
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+ .text          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .data          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .bss           0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .text._malloc_r
+                0x00000000      0x554 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .data.__malloc_av_
+                0x00000000      0x408 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .data.__malloc_trim_threshold
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .bss.__malloc_max_total_mem
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .bss.__malloc_max_sbrked_mem
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .bss.__malloc_top_pad
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .bss.__malloc_current_mallinfo
+                0x00000000       0x28 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .data.__malloc_sbrk_base
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .text          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+ .data          0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+ .bss           0x00000000        0x0 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+ .text.__malloc_lock
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+ .text.__malloc_unlock
+                0x00000000        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+rom              0x00000000         0x00008000         xr
+ram              0x10000000         0x00001000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD out/forth.o
+LOAD out/dictionary.o
+LOAD out/core_extensions.o
+LOAD out/interface.o
+LOAD out/startup.o
+LOAD out/syscall.o
+LOAD out/nonstdio.o
+LOAD out/main.o
+LOAD out/timers.o
+LOAD out/testcalls.o
+LOAD out/uart.o
+LOAD out/vectors.o
+LOAD out/systick.o
+LOAD out/system_LPC11xx.o
+LOAD out/LPC11xx.o
+LOAD /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libstdc++.a
+LOAD /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libm.a
+START GROUP
+LOAD /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a
+LOAD /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a
+END GROUP
+                0x00000100                __main_stack_size = 0x100
+                0x00000400                __process_stack_size = 0x400
+                [!provide]                PROVIDE (__main_stack_size, __main_stack_size)
+                [!provide]                PROVIDE (__process_stack_size, __process_stack_size)
+                0x00000000                __rom_start = ORIGIN (rom)
+                0x00008000                __rom_size = LENGTH (rom)
+                0x00008000                __rom_end = (__rom_start + __rom_size)
+                0x10000000                __ram_start = ORIGIN (ram)
+                0x00001000                __ram_size = LENGTH (ram)
+                0x10001000                __ram_end = (__ram_start + __ram_size)
+                [!provide]                PROVIDE (__rom_start, __rom_start)
+                [!provide]                PROVIDE (__rom_size, __rom_size)
+                [!provide]                PROVIDE (__rom_end, __rom_end)
+                [!provide]                PROVIDE (__ram_start, __ram_start)
+                [!provide]                PROVIDE (__ram_size, __ram_size)
+                [!provide]                PROVIDE (__ram_end, __ram_end)
+
+.text           0x00000000      0xfc0
+                0x00000000                . = ALIGN (0x4)
+                0x00000000                __text_start = .
+                [!provide]                PROVIDE (__text_start, __text_start)
+                0x00000000                . = ALIGN (0x4)
+ *(.vectors)
+ .vectors       0x00000000       0xc0 out/vectors.o
+                0x00000000                vectors
+                0x000000c0                . = ALIGN (0x4)
+ *(.text .text.* .gnu.linkonce.t.*)
+ .text          0x000000c0       0x30 out/forth.o
+                0x000000c0                forth
+                0x000000d2                semi
+                0x000000d2                inner_interp
+                0x000000da                next
+ .text          0x000000f0       0x34 out/startup.o
+                0x000000f0                Reset_Handler
+                0x00000118                NMI_Handler
+                0x0000011a                HardFault_Handler
+                0x0000011c                SVC_Handler
+                0x0000011e                PendSV_Handler
+                0x00000122                Default_Handler
+                0x00000122                DEF_IRQHandler
+ .text.print_uint
+                0x00000124       0x58 out/nonstdio.o
+                0x00000124                print_uint
+ .text.print_string
+                0x0000017c       0x38 out/nonstdio.o
+                0x0000017c                print_string
+ .text.print_newline
+                0x000001b4       0x14 out/nonstdio.o
+                0x000001b4                print_newline
+ .text.systick_wait
+                0x000001c8       0x28 out/main.o
+                0x000001c8                systick_wait
+ .text.blinky   0x000001f0       0x20 out/main.o
+                0x000001f0                blinky
+ .text.TIMER16_1_IRQHandler
+                0x00000210       0x74 out/main.o
+                0x00000210                TIMER16_1_IRQHandler
+ .text.main     0x00000284      0x18c out/main.o
+                0x00000284                main
+ .text.NVIC_EnableIRQ
+                0x00000410       0x2c out/timers.o
+ .text.pwm_init
+                0x0000043c      0x1a8 out/timers.o
+                0x0000043c                pwm_init
+ .text.pwm_set  0x000005e4       0x74 out/timers.o
+                0x000005e4                pwm_set
+ .text.capture_init
+                0x00000658       0x7c out/timers.o
+                0x00000658                capture_init
+ .text.NVIC_EnableIRQ
+                0x000006d4       0x2c out/uart.o
+ .text.serial_init
+                0x00000700      0x15c out/uart.o
+                0x00000700                serial_init
+ .text.serial_send
+                0x0000085c       0x2c out/uart.o
+                0x0000085c                serial_send
+ .text.UART_IRQHandler
+                0x00000888       0xa0 out/uart.o
+                0x00000888                UART_IRQHandler
+ .text.serial_init_irq
+                0x00000928       0x74 out/uart.o
+                0x00000928                serial_init_irq
+ .text.__Default_Handler
+                0x0000099c        0x8 out/vectors.o
+                0x0000099c                WAKEUP_PIO0_11_IRQHandler
+                0x0000099c                TIMER16_0_IRQHandler
+                0x0000099c                WAKEUP_PIO0_3_IRQHandler
+                0x0000099c                __Reserved_0x1C_Handler
+                0x0000099c                TIMER32_0_IRQHandler
+                0x0000099c                WAKEUP_PIO0_10_IRQHandler
+                0x0000099c                TIMER32_1_IRQHandler
+                0x0000099c                WAKEUP_PIO0_8_IRQHandler
+                0x0000099c                __Reserved_0x20_Handler
+                0x0000099c                __Reserved_0x10_Handler
+                0x0000099c                PIOINT1_IRQHandler
+                0x0000099c                CAN_IRQHandler
+                0x0000099c                SSP0_IRQHandler
+                0x0000099c                __Reserved_0x34_Handler
+                0x0000099c                __Reserved_0x30_Handler
+                0x0000099c                WAKEUP_PIO0_7_IRQHandler
+                0x0000099c                ADC_IRQHandler
+                0x0000099c                SSP1_IRQHandler
+                0x0000099c                PIOINT2_IRQHandler
+                0x0000099c                __Reserved_0x18_Handler
+                0x0000099c                __Reserved_0x28_Handler
+                0x0000099c                BOD_IRQHandler
+                0x0000099c                WAKEUP_PIO0_2_IRQHandler
+                0x0000099c                __Reserved_0x08_Handler
+                0x0000099c                PIOINT0_IRQHandler
+                0x0000099c                I2C_IRQHandler
+                0x0000099c                WAKEUP_PIO0_9_IRQHandler
+                0x0000099c                __Reserved_0x24_Handler
+                0x0000099c                WDT_IRQHandler
+                0x0000099c                __Reserved_0xAC_Handler
+                0x0000099c                WAKEUP_PIO0_5_IRQHandler
+                0x0000099c                __Reserved_0x14_Handler
+                0x0000099c                __Reserved_0x9C_Handler
+                0x0000099c                WAKEUP_PIO0_1_IRQHandler
+                0x0000099c                __Reserved_0x98_Handler
+                0x0000099c                WAKEUP_PIO0_0_IRQHandler
+                0x0000099c                WAKEUP_PIO0_6_IRQHandler
+                0x0000099c                WAKEUP_PIO0_4_IRQHandler
+                0x0000099c                WAKEUP_PIO1_0_IRQHandler
+                0x0000099c                PIOINT3_IRQHandler
+ .text.systick_init
+                0x000009a4       0xc0 out/systick.o
+                0x000009a4                systick_init
+ .text.systick_set_timer
+                0x00000a64       0x70 out/systick.o
+                0x00000a64                systick_set_timer
+ .text.systick_get_timer
+                0x00000ad4       0x40 out/systick.o
+                0x00000ad4                systick_get_timer
+ .text.systick_set_callback
+                0x00000b14       0x38 out/systick.o
+                0x00000b14                systick_set_callback
+ .text.SysTick_Handler
+                0x00000b4c      0x16c out/systick.o
+                0x00000b4c                SysTick_Handler
+ .text.SystemCoreClockUpdate
+                0x00000cb8       0x18 out/system_LPC11xx.o
+                0x00000cb8                SystemCoreClockUpdate
+ .text.SystemInit
+                0x00000cd0       0x18 out/system_LPC11xx.o
+                0x00000cd0                SystemInit
+ .text.PLL_Set_Registers
+                0x00000ce8       0xe0 out/LPC11xx.o
+                0x00000ce8                PLL_Set_Registers
+ .text.MAINCLK_Set_Source
+                0x00000dc8       0x4c out/LPC11xx.o
+                0x00000dc8                MAINCLK_Set_Source
+ .text.Flash_Set_Access_Clocks
+                0x00000e14       0x68 out/LPC11xx.o
+                0x00000e14                Flash_Set_Access_Clocks
+ .text          0x00000e7c      0x114 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+                0x00000e7c                __udivsi3
+                0x00000e7c                __aeabi_uidiv
+                0x00000f88                __aeabi_uidivmod
+ .text          0x00000f90        0x4 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+                0x00000f90                __aeabi_ldiv0
+                0x00000f90                __aeabi_idiv0
+                0x00000f94                . = ALIGN (0x4)
+ *(.glue_7t .glue_7)
+ .glue_7        0x00000f94        0x0 linker stubs
+ .glue_7t       0x00000f94        0x0 linker stubs
+                0x00000f94                . = ALIGN (0x4)
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata.hex_chars
+                0x00000f94       0x14 out/nonstdio.o
+ .rodata        0x00000fa8        0x4 out/main.o
+ .rodata.serial_init
+                0x00000fac       0x14 out/uart.o
+                0x00000fc0                . = ALIGN (0x4)
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x00000fc0                . = ALIGN (0x4)
+ *(.gcc_except_table)
+                0x00000fc0                . = ALIGN (0x4)
+ *(.eh_frame_hdr)
+                0x00000fc0                . = ALIGN (0x4)
+ *(.eh_frame)
+                0x00000fc0                . = ALIGN (0x4)
+ *(.init)
+                0x00000fc0                . = ALIGN (0x4)
+                0x00000fc0                __preinit_array_start = .
+ *(.preinit_array)
+                0x00000fc0                . = ALIGN (0x4)
+                0x00000fc0                __preinit_array_end = .
+                0x00000fc0                __init_array_start = .
+ *(SORT(.init_array.*))
+                0x00000fc0                . = ALIGN (0x4)
+ *(.init_array)
+                0x00000fc0                . = ALIGN (0x4)
+                0x00000fc0                __init_array_end = .
+ *(.fini)
+                0x00000fc0                . = ALIGN (0x4)
+                0x00000fc0                __fini_array_start = .
+ *(.fini_array)
+                0x00000fc0                . = ALIGN (0x4)
+ *(SORT(.fini_array.*))
+                0x00000fc0                . = ALIGN (0x4)
+                0x00000fc0                __fini_array_end = .
+                0x00000fc0                . = ALIGN (0x4)
+                0x00000fc0                __text_end = .
+                [!provide]                PROVIDE (__text_end, __text_end)
+
+.vfp11_veneer   0x00000fc0        0x0
+ .vfp11_veneer  0x00000fc0        0x0 linker stubs
+
+.v4_bx          0x00000fc0        0x0
+ .v4_bx         0x00000fc0        0x0 linker stubs
+
+.iplt           0x00000fc0        0x0
+ .iplt          0x00000fc0        0x0 out/forth.o
+
+.rel.dyn        0x00000fc0        0x0
+ .rel.iplt      0x00000fc0        0x0 out/forth.o
+                0x00000fc0                . = ALIGN (0x4)
+                0x00000fc0                __exidx_start = .
+                [!provide]                PROVIDE (__exidx_start, __exidx_start)
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x00000fc0                . = ALIGN (0x4)
+                0x00000fc0                __exidx_end = .
+                [!provide]                PROVIDE (__exidx_end, __exidx_end)
+
+.data           0x10000000        0x4 load address 0x00000fc0
+                0x10000000                . = ALIGN (0x4)
+                0x00000fc0                __data_init_start = LOADADDR (.data)
+                [!provide]                PROVIDE (__data_init_start, __data_init_start)
+                0x10000000                __data_start = .
+                [!provide]                PROVIDE (__data_start, __data_start)
+                0x10000000                . = ALIGN (0x4)
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data.SystemCoreClock
+                0x10000000        0x4 out/system_LPC11xx.o
+                0x10000000                SystemCoreClock
+                0x10000004                . = ALIGN (0x4)
+                0x10000004                __data_end = .
+                [!provide]                PROVIDE (__data_end, __data_end)
+
+.igot.plt       0x10000004        0x0 load address 0x00000fc4
+ .igot.plt      0x10000004        0x0 out/forth.o
+
+.bss            0x10000004       0xa4
+                0x10000004                . = ALIGN (0x4)
+                0x10000004                __bss_start = .
+                [!provide]                PROVIDE (__bss_start, __bss_start)
+                0x10000004                . = ALIGN (0x4)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x10000004        0x0 out/forth.o
+                0x10000004                sys_here
+                0x10000004                sys_base
+                0x10000004                sys_state
+ .bss.buff      0x10000004       0x20 out/nonstdio.o
+ .bss.distance_mm
+                0x10000024        0x4 out/main.o
+ .bss.is_falling.5742
+                0x10000028        0x1 out/main.o
+ *fill*         0x10000029        0x3 
+ .bss.capture_falling.5741
+                0x1000002c        0x4 out/main.o
+ .bss.capture_rising.5740
+                0x10000030        0x4 out/main.o
+ .bss.Rx_buf_size
+                0x10000034        0x1 out/uart.o
+ *fill*         0x10000035        0x3 
+ .bss.Rx_buf    0x10000038        0x4 out/uart.o
+ .bss.Rx_head   0x1000003c        0x1 out/uart.o
+ .bss.Rx_tail   0x1000003d        0x1 out/uart.o
+ *fill*         0x1000003e        0x2 
+ .bss.ticks     0x10000040        0x4 out/systick.o
+ .bss.ms_per_irq
+                0x10000044        0x4 out/systick.o
+ .bss.milliseconds
+                0x10000048        0x4 out/systick.o
+ .bss.milliseconds_high
+                0x1000004c        0x4 out/systick.o
+ .bss.Timers    0x10000050        0x4 out/systick.o
+ .bss.Num_timers
+                0x10000054        0x1 out/systick.o
+                0x10000058                . = ALIGN (0x4)
+ *fill*         0x10000055        0x3 
+ *(COMMON)
+ COMMON         0x10000058       0x50 out/main.o
+                0x10000058                my_timers
+                0x10000088                rx_buf
+                0x100000a8                . = ALIGN (0x4)
+                0x100000a8                __bss_end = .
+                [!provide]                PROVIDE (__bss_end, __bss_end)
+
+.stack          0x100000a8     0x1100
+                0x100000a8                . = ALIGN (0x8)
+                0x100000a8                __stack_start = .
+                [!provide]                PROVIDE (__stack_start, __stack_start)
+                0x100000a8                . = ALIGN (0x8)
+                0x100000a8                __main_stack_start = .
+                [!provide]                PROVIDE (__main_stack_start, __main_stack_start)
+                0x100001a8                . = (. + __main_stack_size)
+ *fill*         0x100000a8      0x100 
+                0x100001a8                . = ALIGN (0x8)
+                0x100001a8                __main_stack_end = .
+                [!provide]                PROVIDE (__main_stack_end, __main_stack_end)
+                0x100001a8                . = ALIGN (0x8)
+                0x100001a8                __process_stack_start = .
+                [!provide]                PROVIDE (__process_stack_start, __process_stack_start)
+                0x100005a8                . = (. + __process_stack_size)
+ *fill*         0x100001a8      0x400 
+                0x100005a8                . = ALIGN (0x8)
+                0x100005a8                __process_stack_end = .
+                [!provide]                PROVIDE (__process_stack_end, __process_stack_end)
+                0x100005a8                . = ALIGN (0x8)
+                0x100005a8                __stack_end = .
+                [!provide]                PROVIDE (__stack_end, __stack_end)
+ .stack         0x100005a8      0xc00 out/startup.o
+                0x100005a8                __StackLimit
+                0x100011a8                __StackTop
+                0x100011a8                . = ALIGN (0x4)
+                0x100011a8                __heap_start = .
+                [!provide]                PROVIDE (__heap_start, __heap_start)
+                0x100011a8                . = ALIGN (0x4)
+                0x10001000                __heap_end = __ram_end
+                [!provide]                PROVIDE (__heap_end, __heap_end)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x418
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 out/forth.o
+ .debug_aranges
+                0x00000020       0x20 out/dictionary.o
+ .debug_aranges
+                0x00000040       0x20 out/core_extensions.o
+ .debug_aranges
+                0x00000060       0x20 out/startup.o
+ .debug_aranges
+                0x00000080      0x108 out/syscall.o
+ .debug_aranges
+                0x00000188       0x70 out/nonstdio.o
+ .debug_aranges
+                0x000001f8       0x40 out/main.o
+ .debug_aranges
+                0x00000238       0x40 out/timers.o
+ .debug_aranges
+                0x00000278       0x40 out/testcalls.o
+ .debug_aranges
+                0x000002b8       0x60 out/uart.o
+ .debug_aranges
+                0x00000318       0x20 out/vectors.o
+ .debug_aranges
+                0x00000338       0x68 out/systick.o
+ .debug_aranges
+                0x000003a0       0x28 out/system_LPC11xx.o
+ .debug_aranges
+                0x000003c8       0x50 out/LPC11xx.o
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0x4dd7
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000       0x5c out/forth.o
+ .debug_info    0x0000005c       0x61 out/dictionary.o
+ .debug_info    0x000000bd       0x66 out/core_extensions.o
+ .debug_info    0x00000123       0x85 out/startup.o
+ .debug_info    0x000001a8      0xa6a out/syscall.o
+ .debug_info    0x00000c12      0x312 out/nonstdio.o
+ .debug_info    0x00000f24     0x1490 out/main.o
+ .debug_info    0x000023b4      0xb58 out/timers.o
+ .debug_info    0x00002f0c      0x173 out/testcalls.o
+ .debug_info    0x0000307f      0xecb out/uart.o
+ .debug_info    0x00003f4a       0x92 out/vectors.o
+ .debug_info    0x00003fdc      0x595 out/systick.o
+ .debug_info    0x00004571       0xc0 out/system_LPC11xx.o
+ .debug_info    0x00004631      0x7a6 out/LPC11xx.o
+
+.debug_abbrev   0x00000000      0xdba
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0x14 out/forth.o
+ .debug_abbrev  0x00000014       0x14 out/dictionary.o
+ .debug_abbrev  0x00000028       0x14 out/core_extensions.o
+ .debug_abbrev  0x0000003c       0x14 out/startup.o
+ .debug_abbrev  0x00000050      0x151 out/syscall.o
+ .debug_abbrev  0x000001a1      0x12e out/nonstdio.o
+ .debug_abbrev  0x000002cf      0x280 out/main.o
+ .debug_abbrev  0x0000054f      0x18b out/timers.o
+ .debug_abbrev  0x000006da       0xae out/testcalls.o
+ .debug_abbrev  0x00000788      0x1cb out/uart.o
+ .debug_abbrev  0x00000953       0x85 out/vectors.o
+ .debug_abbrev  0x000009d8      0x1da out/systick.o
+ .debug_abbrev  0x00000bb2       0x63 out/system_LPC11xx.o
+ .debug_abbrev  0x00000c15      0x1a5 out/LPC11xx.o
+
+.debug_line     0x00000000     0x20a1
+ *(.debug_line)
+ .debug_line    0x00000000       0x50 out/forth.o
+ .debug_line    0x00000050      0x1f0 out/dictionary.o
+ .debug_line    0x00000240       0x44 out/core_extensions.o
+ .debug_line    0x00000284       0x7a out/startup.o
+ .debug_line    0x000002fe      0x4c6 out/syscall.o
+ .debug_line    0x000007c4      0x314 out/nonstdio.o
+ .debug_line    0x00000ad8      0x3e5 out/main.o
+ .debug_line    0x00000ebd      0x370 out/timers.o
+ .debug_line    0x0000122d       0x88 out/testcalls.o
+ .debug_line    0x000012b5      0x3aa out/uart.o
+ .debug_line    0x0000165f       0x3e out/vectors.o
+ .debug_line    0x0000169d      0x3c3 out/systick.o
+ .debug_line    0x00001a60      0x2db out/system_LPC11xx.o
+ .debug_line    0x00001d3b      0x366 out/LPC11xx.o
+
+.debug_frame    0x00000000      0xc44
+ *(.debug_frame)
+ .debug_frame   0x00000000      0x3c8 out/syscall.o
+ .debug_frame   0x000003c8      0x164 out/nonstdio.o
+ .debug_frame   0x0000052c       0xac out/main.o
+ .debug_frame   0x000005d8       0xb0 out/timers.o
+ .debug_frame   0x00000688       0xac out/testcalls.o
+ .debug_frame   0x00000734      0x130 out/uart.o
+ .debug_frame   0x00000864       0x2c out/vectors.o
+ .debug_frame   0x00000890      0x150 out/systick.o
+ .debug_frame   0x000009e0       0x48 out/system_LPC11xx.o
+ .debug_frame   0x00000a28       0xf4 out/LPC11xx.o
+ .debug_frame   0x00000b1c       0x20 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+ .debug_frame   0x00000b3c       0x48 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+ .debug_frame   0x00000b84       0x54 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+ .debug_frame   0x00000bd8       0x3c /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .debug_frame   0x00000c14       0x30 /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+
+.debug_str      0x00000000     0x9331
+ *(.debug_str)
+ .debug_str     0x00000000     0x4cb9 out/syscall.o
+                               0x4e2d (size before relaxing)
+ .debug_str     0x00004cb9      0x808 out/nonstdio.o
+                               0x2f38 (size before relaxing)
+ .debug_str     0x000054c1     0x33fb out/main.o
+                               0x7eb7 (size before relaxing)
+ .debug_str     0x000088bc      0x18f out/timers.o
+                               0x57dd (size before relaxing)
+ .debug_str     0x00008a4b       0x12 out/testcalls.o
+                               0x21e0 (size before relaxing)
+ .debug_str     0x00008a5d      0x5a4 out/uart.o
+                               0x5c99 (size before relaxing)
+ .debug_str     0x00009001       0x35 out/vectors.o
+                               0x220c (size before relaxing)
+ .debug_str     0x00009036      0x11c out/systick.o
+                               0x56cb (size before relaxing)
+ .debug_str     0x00009152       0xb2 out/system_LPC11xx.o
+                               0x5171 (size before relaxing)
+ .debug_str     0x00009204      0x12d out/LPC11xx.o
+                               0x5507 (size before relaxing)
+
+.debug_loc      0x00000000     0x11fc
+ *(.debug_loc)
+ .debug_loc     0x00000000      0x678 out/syscall.o
+ .debug_loc     0x00000678      0x244 out/nonstdio.o
+ .debug_loc     0x000008bc      0x10c out/main.o
+ .debug_loc     0x000009c8      0x118 out/timers.o
+ .debug_loc     0x00000ae0      0x10c out/testcalls.o
+ .debug_loc     0x00000bec      0x1f8 out/uart.o
+ .debug_loc     0x00000de4       0x2c out/vectors.o
+ .debug_loc     0x00000e10      0x218 out/systick.o
+ .debug_loc     0x00001028       0x58 out/system_LPC11xx.o
+ .debug_loc     0x00001080      0x17c out/LPC11xx.o
+
+.heap           0x00000000        0x0
+ .heap          0x00000000        0x0 out/startup.o
+
+.comment        0x00000000       0x70
+ .comment       0x00000000       0x70 out/syscall.o
+                                 0x71 (size before relaxing)
+ .comment       0x00000070       0x71 out/nonstdio.o
+ .comment       0x00000070       0x71 out/main.o
+ .comment       0x00000070       0x71 out/timers.o
+ .comment       0x00000070       0x71 out/testcalls.o
+ .comment       0x00000070       0x71 out/uart.o
+ .comment       0x00000070       0x71 out/vectors.o
+ .comment       0x00000070       0x71 out/systick.o
+ .comment       0x00000070       0x71 out/system_LPC11xx.o
+ .comment       0x00000070       0x71 out/LPC11xx.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.note.gnu.arm.ident
+ *(.note.gnu.arm.ident)
+
+.ARM.attributes
+                0x00000000       0x2d
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x21 out/forth.o
+ .ARM.attributes
+                0x00000021       0x21 out/dictionary.o
+ .ARM.attributes
+                0x00000042       0x21 out/core_extensions.o
+ .ARM.attributes
+                0x00000063       0x21 out/interface.o
+ .ARM.attributes
+                0x00000084       0x1b out/startup.o
+ .ARM.attributes
+                0x0000009f       0x31 out/syscall.o
+ .ARM.attributes
+                0x000000d0       0x31 out/nonstdio.o
+ .ARM.attributes
+                0x00000101       0x31 out/main.o
+ .ARM.attributes
+                0x00000132       0x31 out/timers.o
+ .ARM.attributes
+                0x00000163       0x31 out/testcalls.o
+ .ARM.attributes
+                0x00000194       0x31 out/uart.o
+ .ARM.attributes
+                0x000001c5       0x31 out/vectors.o
+ .ARM.attributes
+                0x000001f6       0x31 out/systick.o
+ .ARM.attributes
+                0x00000227       0x31 out/system_LPC11xx.o
+ .ARM.attributes
+                0x00000258       0x31 out/LPC11xx.o
+ .ARM.attributes
+                0x00000289       0x1e /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+ .ARM.attributes
+                0x000002a7       0x1e /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+ .ARM.attributes
+                0x000002c5       0x2c /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+ .ARM.attributes
+                0x000002f1       0x2c /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+ .ARM.attributes
+                0x0000031d       0x2c /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+ .ARM.attributes
+                0x00000349       0x2c /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+ .ARM.attributes
+                0x00000375       0x2c /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+
+/DISCARD/
+ *(.note.GNU-stack)
+                [!provide]                PROVIDE (__text_size, (__text_end - __text_start))
+                [!provide]                PROVIDE (__exidx_size, (__exidx_end - __exidx_start))
+                [!provide]                PROVIDE (__data_size, (__data_end - __data_start))
+                [!provide]                PROVIDE (__bss_size, (__bss_end - __bss_start))
+                [!provide]                PROVIDE (__stack_size, (__stack_end - __stack_start))
+                [!provide]                PROVIDE (__heap_size, (__heap_end - __heap_start))
+OUTPUT(out/fortharm.elf elf32-littlearm)
+
+.debug_ranges   0x00000000      0x2f8
+ .debug_ranges  0x00000000       0xf8 out/syscall.o
+ .debug_ranges  0x000000f8       0x60 out/nonstdio.o
+ .debug_ranges  0x00000158       0x30 out/main.o
+ .debug_ranges  0x00000188       0x30 out/timers.o
+ .debug_ranges  0x000001b8       0x30 out/testcalls.o
+ .debug_ranges  0x000001e8       0x50 out/uart.o
+ .debug_ranges  0x00000238       0x10 out/vectors.o
+ .debug_ranges  0x00000248       0x58 out/systick.o
+ .debug_ranges  0x000002a0       0x18 out/system_LPC11xx.o
+ .debug_ranges  0x000002b8       0x40 out/LPC11xx.o
+
+.debug_macro    0x00000000     0x24aa
+ .debug_macro   0x00000000      0x12c out/syscall.o
+ .debug_macro   0x0000012c      0x7e4 out/syscall.o
+ .debug_macro   0x00000910       0x10 out/syscall.o
+ .debug_macro   0x00000920       0x3a out/syscall.o
+ .debug_macro   0x0000095a       0x10 out/syscall.o
+ .debug_macro   0x0000096a       0x2e out/syscall.o
+ .debug_macro   0x00000998       0xa3 out/syscall.o
+ .debug_macro   0x00000a3b       0x3a out/syscall.o
+ .debug_macro   0x00000a75       0x52 out/syscall.o
+ .debug_macro   0x00000ac7       0x19 out/syscall.o
+ .debug_macro   0x00000ae0      0x16d out/syscall.o
+ .debug_macro   0x00000c4d      0x239 out/syscall.o
+ .debug_macro   0x00000e86       0x10 out/syscall.o
+ .debug_macro   0x00000e96       0x16 out/syscall.o
+ .debug_macro   0x00000eac       0x89 out/syscall.o
+ .debug_macro   0x00000f35       0x10 out/syscall.o
+ .debug_macro   0x00000f45       0xf5 out/syscall.o
+ .debug_macro   0x0000103a       0x22 out/syscall.o
+ .debug_macro   0x0000105c       0x91 out/syscall.o
+ .debug_macro   0x000010ed       0x34 out/syscall.o
+ .debug_macro   0x00001121      0x120 out/syscall.o
+ .debug_macro   0x00001241       0x6e out/nonstdio.o
+ .debug_macro   0x000012af      0x20e out/nonstdio.o
+ .debug_macro   0x000014bd      0x15b out/main.o
+ .debug_macro   0x00001618       0x28 out/main.o
+ .debug_macro   0x00001640       0x3a out/main.o
+ .debug_macro   0x0000167a      0x241 out/main.o
+ .debug_macro   0x000018bb      0x567 out/main.o
+ .debug_macro   0x00001e22       0x10 out/main.o
+ .debug_macro   0x00001e32       0x10 out/main.o
+ .debug_macro   0x00001e42       0x16 out/main.o
+ .debug_macro   0x00001e58      0x16d out/main.o
+ .debug_macro   0x00001fc5       0xa6 out/timers.o
+ .debug_macro   0x0000206b       0x11 out/testcalls.o
+ .debug_macro   0x0000207c       0xa8 out/uart.o
+ .debug_macro   0x00002124       0x11 out/vectors.o
+ .debug_macro   0x00002135       0xb5 out/systick.o
+ .debug_macro   0x000021ea      0x16c out/systick.o
+ .debug_macro   0x00002356       0xb6 out/system_LPC11xx.o
+ .debug_macro   0x0000240c       0x9e out/LPC11xx.o
+
+Cross Reference Table
+
+Symbol                                            File
+ADC_EnableIRQ                                     out/LPC11xx.o
+ADC_IRQHandler                                    out/vectors.o
+ADC_Select_Channels                               out/LPC11xx.o
+BOD_IRQHandler                                    out/vectors.o
+CAN_IRQHandler                                    out/vectors.o
+DEF_IRQHandler                                    out/startup.o
+Default_Handler                                   out/startup.o
+Flash_Set_Access_Clocks                           out/LPC11xx.o
+                                                  out/main.o
+GPIO_Init                                         out/LPC11xx.o
+HardFault_Handler                                 out/startup.o
+I2C_IRQHandler                                    out/vectors.o
+MAINCLK_Set_Source                                out/LPC11xx.o
+                                                  out/main.o
+NMI_Handler                                       out/startup.o
+PIOINT0_IRQHandler                                out/vectors.o
+PIOINT1_IRQHandler                                out/vectors.o
+PIOINT2_IRQHandler                                out/vectors.o
+PIOINT3_IRQHandler                                out/vectors.o
+PLL_Set_Frequency                                 out/LPC11xx.o
+PLL_Set_Registers                                 out/LPC11xx.o
+                                                  out/main.o
+PendSV_Handler                                    out/startup.o
+Reset_Handler                                     out/startup.o
+                                                  out/vectors.o
+SSP0_IRQHandler                                   out/vectors.o
+SSP1_IRQHandler                                   out/vectors.o
+SVC_Handler                                       out/startup.o
+SysTick_Handler                                   out/systick.o
+                                                  out/startup.o
+SystemCoreClock                                   out/system_LPC11xx.o
+                                                  out/systick.o
+                                                  out/uart.o
+                                                  out/main.o
+SystemCoreClockUpdate                             out/system_LPC11xx.o
+                                                  out/LPC11xx.o
+SystemInit                                        out/system_LPC11xx.o
+                                                  out/startup.o
+TIMER16_0_IRQHandler                              out/vectors.o
+TIMER16_1_IRQHandler                              out/main.o
+TIMER32_0_IRQHandler                              out/vectors.o
+TIMER32_1_IRQHandler                              out/vectors.o
+UART_IRQHandler                                   out/uart.o
+WAKEUP_PIO0_0_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_10_IRQHandler                         out/vectors.o
+WAKEUP_PIO0_11_IRQHandler                         out/vectors.o
+WAKEUP_PIO0_1_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_2_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_3_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_4_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_5_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_6_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_7_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_8_IRQHandler                          out/vectors.o
+WAKEUP_PIO0_9_IRQHandler                          out/vectors.o
+WAKEUP_PIO1_0_IRQHandler                          out/vectors.o
+WDT_IRQHandler                                    out/vectors.o
+__HeapBase                                        out/startup.o
+__HeapLimit                                       out/startup.o
+__Reserved_0x08_Handler                           out/vectors.o
+__Reserved_0x10_Handler                           out/vectors.o
+__Reserved_0x14_Handler                           out/vectors.o
+__Reserved_0x18_Handler                           out/vectors.o
+__Reserved_0x1C_Handler                           out/vectors.o
+__Reserved_0x20_Handler                           out/vectors.o
+__Reserved_0x24_Handler                           out/vectors.o
+__Reserved_0x28_Handler                           out/vectors.o
+__Reserved_0x30_Handler                           out/vectors.o
+__Reserved_0x34_Handler                           out/vectors.o
+__Reserved_0x98_Handler                           out/vectors.o
+__Reserved_0x9C_Handler                           out/vectors.o
+__Reserved_0xAC_Handler                           out/vectors.o
+__StackLimit                                      out/startup.o
+__StackTop                                        out/startup.o
+__aeabi_idiv0                                     /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+__aeabi_ldiv0                                     /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_dvmd_tls.o)
+__aeabi_uidiv                                     /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+                                                  out/systick.o
+                                                  out/uart.o
+                                                  out/main.o
+                                                  out/nonstdio.o
+__aeabi_uidivmod                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+                                                  out/nonstdio.o
+__c_right_bracket                                 out/dictionary.o
+__data_end__                                      out/startup.o
+__data_start__                                    out/startup.o
+__env                                             out/syscall.o
+__etext                                           out/startup.o
+__isr_vector                                      out/startup.o
+__main_stack_end                                  out/vectors.o
+__malloc_av_                                      /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+__malloc_current_mallinfo                         /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+__malloc_lock                                     /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+__malloc_max_sbrked_mem                           /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+__malloc_max_total_mem                            /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+__malloc_sbrk_base                                /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+__malloc_top_pad                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+__malloc_trim_threshold                           /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+__malloc_unlock                                   /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mlock.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+__udivsi3                                         /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/armv6-m/libgcc.a(_udivsi3.o)
+__w_comma                                         out/dictionary.o
+__w_dot                                           out/dictionary.o
+__w_dot_quote                                     out/dictionary.o
+__w_minus                                         out/dictionary.o
+__w_number_sign                                   out/dictionary.o
+__w_number_sign_greater                           out/dictionary.o
+__w_number_sign_s                                 out/dictionary.o
+__w_paren                                         out/dictionary.o
+__w_plus                                          out/dictionary.o
+__w_plus_loop                                     out/dictionary.o
+__w_plus_store                                    out/dictionary.o
+__w_right_bracket                                 out/dictionary.o
+                                                  out/core_extensions.o
+__w_slash                                         out/dictionary.o
+__w_slash_mod                                     out/dictionary.o
+__w_star                                          out/dictionary.o
+__w_star_slash                                    out/dictionary.o
+__w_star_slash_mod                                out/dictionary.o
+__w_tick                                          out/dictionary.o
+__w_zero_less                                     out/dictionary.o
+_close_r                                          out/syscall.o
+_end                                              out/syscall.o
+_fork_r                                           out/syscall.o
+_free_r                                           /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+_fstat_r                                          out/syscall.o
+_global_impure_ptr                                /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+_impure_ptr                                       /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-impure.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+_isatty_r                                         out/syscall.o
+_link_r                                           out/syscall.o
+_lseek_r                                          out/syscall.o
+_malloc_r                                         /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+_malloc_trim_r                                    /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+_open_r                                           out/syscall.o
+_read_r                                           out/syscall.o
+_reclaim_reent                                    /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+_sbrk_r                                           out/syscall.o
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-mallocr.o)
+                                                  /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-freer.o)
+_stat_r                                           out/syscall.o
+_unlink_r                                         out/syscall.o
+_wait_r                                           out/syscall.o
+_write_r                                          out/syscall.o
+blinky                                            out/main.o
+capture_init                                      out/timers.o
+                                                  out/main.o
+cleanup_glue                                      /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+close                                             out/syscall.o
+environ                                           out/syscall.o
+errno                                             /opt/gcc-arm-5_4/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv6-m/libc.a(lib_a-reent.o)
+                                                  out/syscall.o
+execve                                            out/syscall.o
+f                                                 out/testcalls.o
+fork                                              out/syscall.o
+forth                                             out/forth.o
+                                                  out/main.o
+fstat                                             out/syscall.o
+g                                                 out/testcalls.o
+get_capture                                       out/timers.o
+getpid                                            out/syscall.o
+gl                                                out/testcalls.o
+h                                                 out/testcalls.o
+i                                                 out/testcalls.o
+inner_interp                                      out/forth.o
+isatty                                            out/syscall.o
+kill                                              out/syscall.o
+link                                              out/syscall.o
+lseek                                             out/syscall.o
+main                                              out/main.o
+                                                  out/startup.o
+main2                                             out/testcalls.o
+msg                                               out/main.o
+my_timers                                         out/main.o
+next                                              out/forth.o
+                                                  out/core_extensions.o
+                                                  out/dictionary.o
+open                                              out/syscall.o
+print_char                                        out/nonstdio.o
+print_hex                                         out/nonstdio.o
+print_int                                         out/nonstdio.o
+print_newline                                     out/nonstdio.o
+                                                  out/main.o
+print_string                                      out/nonstdio.o
+                                                  out/main.o
+print_uint                                        out/nonstdio.o
+                                                  out/main.o
+pwm_init                                          out/timers.o
+                                                  out/main.o
+pwm_set                                           out/timers.o
+                                                  out/main.o
+read                                              out/syscall.o
+read_char                                         out/nonstdio.o
+read_line                                         out/nonstdio.o
+read_string                                       out/nonstdio.o
+rx_buf                                            out/main.o
+sbrk                                              out/syscall.o
+semi                                              out/forth.o
+serial_init                                       out/uart.o
+serial_init_irq                                   out/uart.o
+                                                  out/main.o
+serial_receive                                    out/uart.o
+                                                  out/nonstdio.o
+serial_receive_irq                                out/uart.o
+serial_send                                       out/uart.o
+                                                  out/nonstdio.o
+                                                  out/syscall.o
+serial_send_irq                                   out/uart.o
+set_io_functions                                  out/nonstdio.o
+sound_set                                         out/main.o
+stat                                              out/syscall.o
+store                                             out/dictionary.o
+sys_base                                          out/forth.o
+sys_here                                          out/forth.o
+sys_state                                         out/forth.o
+                                                  out/dictionary.o
+systick_get_milliseconds                          out/systick.o
+systick_get_milliseconds_long                     out/systick.o
+systick_get_ticks                                 out/systick.o
+systick_get_timer                                 out/systick.o
+                                                  out/main.o
+systick_init                                      out/systick.o
+                                                  out/main.o
+systick_set_callback                              out/systick.o
+                                                  out/main.o
+systick_set_timer                                 out/systick.o
+                                                  out/main.o
+systick_wait                                      out/main.o
+times                                             out/syscall.o
+unlink                                            out/syscall.o
+unread_char                                       out/nonstdio.o
+vectors                                           out/vectors.o
+wait                                              out/syscall.o
+write                                             out/syscall.o

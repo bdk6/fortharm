@@ -1,0 +1,279 @@
+ARM GAS  /tmp/cc6Q8Jtn.s 			page 1
+
+
+   1              	# 1 "/home/wrcooke/git/projects/arm_gcc/src/startup.S"
+   1              	/* File: startup_ARMCM0.S
+   1              	...
+   0              	
+   0              	
+   2              	 * Purpose: startup file for Cortex-M0 devices. Should use with 
+   3              	 *   GCC for ARM Embedded Processors
+   4              	 * Version: V1.4
+   5              	 * Date: 09 July 2012
+   6              	 * 
+   7              	 * Copyright (c) 2011, 2012, ARM Limited
+   8              	 * All rights reserved.
+   9              	 * 
+  10              	 * Redistribution and use in source and binary forms, with or without
+  11              	 * modification, are permitted provided that the following conditions are met:
+  12              	    * Redistributions of source code must retain the above copyright
+  13              	      notice, this list of conditions and the following disclaimer.
+  14              	    * Redistributions in binary form must reproduce the above copyright
+  15              	      notice, this list of conditions and the following disclaimer in the
+  16              	      documentation and/or other materials provided with the distribution.
+  17              	    * Neither the name of the ARM Limited nor the
+  18              	      names of its contributors may be used to endorse or promote products
+  19              	      derived from this software without specific prior written permission.
+  20              	 * 
+  21              	 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  22              	 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  23              	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  24              	 * DISCLAIMED. IN NO EVENT SHALL ARM LIMITED BE LIABLE FOR ANY
+  25              	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  26              	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  27              	 * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  28              	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  29              	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  30              	 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  31              	 */
+  32              	    .syntax unified
+  33              	    .arch armv6-m
+  34              	
+  35              	    .section .stack
+  36              	    .align 3
+  37              	#ifdef __STACK_SIZE
+  38              	    .equ    Stack_Size, __STACK_SIZE
+  39              	#else
+  40              	    .equ    Stack_Size, 0xc00
+  41              	#endif
+  42              	    .globl    __StackTop
+  43              	    .globl    __StackLimit
+  44              	__StackLimit:
+  45 0000 00000000 	    .space    Stack_Size
+  45      00000000 
+  45      00000000 
+  45      00000000 
+  45      00000000 
+  46              	    .size __StackLimit, . - __StackLimit
+  47              	__StackTop:
+  48              	    .size __StackTop, . - __StackTop
+  49              	
+ARM GAS  /tmp/cc6Q8Jtn.s 			page 2
+
+
+  50              	    .section .heap
+  51              	    .align 3
+  52              	#ifdef __HEAP_SIZE
+  53              	    .equ    Heap_Size, __HEAP_SIZE
+  54              	#else
+  55              	    .equ    Heap_Size, 0
+  56              	#endif
+  57              	    .globl    __HeapBase
+  58              	    .globl    __HeapLimit
+  59              	__HeapBase:
+  60              	    .if    Heap_Size
+  61              	    .space    Heap_Size
+  62              	    .endif
+  63              	    .size __HeapBase, . - __HeapBase
+  64              	__HeapLimit:
+  65              	    .size __HeapLimit, . - __HeapLimit
+  66              	    
+  67              	    .section .isr_vector
+  68              	    .align 2
+  69              	    .globl __isr_vector
+  70              	__isr_vector:
+  71 0000 00000000 	    .long    __StackTop            /* Top of Stack */
+  72 0004 00000000 	    .long    Reset_Handler         /* Reset Handler */
+  73 0008 00000000 	    .long    NMI_Handler           /* NMI Handler */
+  74 000c 00000000 	    .long    HardFault_Handler     /* Hard Fault Handler */
+  75 0010 00000000 	    .long    0                     /* Reserved */
+  76 0014 00000000 	    .long    0                     /* Reserved */
+  77 0018 00000000 	    .long    0                     /* Reserved */
+  78 001c 00000000 	    .long    0                     /* Reserved */
+  79 0020 00000000 	    .long    0                     /* Reserved */
+  80 0024 00000000 	    .long    0                     /* Reserved */
+  81 0028 00000000 	    .long    0                     /* Reserved */
+  82 002c 00000000 	    .long    SVC_Handler           /* SVCall Handler */
+  83 0030 00000000 	    .long    0                     /* Reserved */
+  84 0034 00000000 	    .long    0                     /* Reserved */
+  85 0038 00000000 	    .long    PendSV_Handler        /* PendSV Handler */
+  86 003c 00000000 	    .long    SysTick_Handler       /* SysTick Handler */
+  87              	
+  88              	    /* External interrupts */
+  89 0040 00000000 	    .long    Default_Handler
+  90              	    
+  91              	    .size    __isr_vector, . - __isr_vector
+  92              	
+  93              	    .text
+  94              	    .thumb
+  95              	    .thumb_func
+  96              	    .align 1
+  97              	    .globl    Reset_Handler
+  98              	    .type    Reset_Handler, %function
+  99              	Reset_Handler:
+ 100              	/*     Loop to copy data from read only memory to RAM. The ranges
+ 101              	 *      of copy from/to are specified by following symbols evaluated in 
+ 102              	 *      linker script.
+ 103              	 *      __etext: End of code section, i.e., begin of data sections to copy from.
+ 104              	 *      __data_start__/__data_end__: RAM address range that data should be
+ 105              	 *      copied to. Both must be aligned to 4 bytes boundary.  */
+ 106              	
+ARM GAS  /tmp/cc6Q8Jtn.s 			page 3
+
+
+ 107 0000 0649     	    ldr    r1, =__etext
+ 108 0002 074A     	    ldr    r2, =__data_start__
+ 109 0004 074B     	    ldr    r3, =__data_end__
+ 110              	
+ 111 0006 9B1A     	    subs    r3, r2
+ 112 0008 03DD     	    ble     .LC0
+ 113              	
+ 114              	.LC1:
+ 115 000a 043B     	    subs    r3, 4
+ 116 000c C858     	    ldr    r0, [r1,r3]
+ 117 000e D050     	    str    r0, [r2,r3]
+ 118 0010 FBDC     	    bgt    .LC1
+ 119              	.LC0:
+ 120              	
+ 121              	#ifdef __STARTUP_CLEAR_BSS
+ 122              	/*     This part of work usually is done in C library startup code. Otherwise,
+ 123              	 *     define this macro to enable it in this startup.
+ 124              	 *
+ 125              	 *     Loop to zero out BSS section, which uses following symbols
+ 126              	 *     in linker script:
+ 127              	 *      __bss_start__: start of BSS section. Must align to 4
+ 128              	 *      __bss_end__: end of BSS section. Must align to 4
+ 129              	 */
+ 130              	    ldr r1, =__bss_start__
+ 131              	    ldr r2, =__bss_end__
+ 132              	
+ 133              	    subs    r2, r1
+ 134              	    ble .LC3
+ 135              	
+ 136              	    movs    r0, 0
+ 137              	.LC2:
+ 138              	    str r0, [r1, r2]
+ 139              	    subs    r2, 4
+ 140              	    bge .LC2
+ 141              	.LC3:
+ 142              	#endif
+ 143              	
+ 144              	#ifndef __NO_SYSTEM_INIT
+ 145 0012 FFF7FEFF 	    bl	SystemInit
+ 146              	#endif
+ 147              	
+ 148              	#ifndef __START
+ 149              	#define __START main
+ 150              	#endif
+ 151 0016 FFF7FEFF 	    bl	__START
+ 152              	
+ 153 001a 00000000 	    .pool
+ 153      00000000 
+ 153      00000000 
+ 153      0000
+ 154              	    .size Reset_Handler, . - Reset_Handler
+ 155              	    
+ 156              	/*    Macro to define default handlers. Default handler
+ 157              	 *    will be weak symbol and just dead loops. They can be
+ 158              	 *    overwritten by other handlers */
+ 159              	    .macro    def_default_handler    handler_name
+ 160              	    .align 1
+ARM GAS  /tmp/cc6Q8Jtn.s 			page 4
+
+
+ 161              	    .thumb_func
+ 162              	    .weak    \handler_name
+ 163              	    .type    \handler_name, %function
+ 164              	\handler_name :
+ 165              	    b    .
+ 166              	    .size    \handler_name, . - \handler_name
+ 167              	    .endm
+ 168              	    
+ 169              	    def_default_handler    NMI_Handler
+ 169              	>  .align 1
+ 169              	>  .thumb_func
+ 169              	>  .weak NMI_Handler
+ 169              	>  .type NMI_Handler,%function
+ 169              	> NMI_Handler:
+ 169 0028 FEE7     	>  b .
+ 169              	>  .size NMI_Handler,.-NMI_Handler
+ 170              	    def_default_handler    HardFault_Handler
+ 170              	>  .align 1
+ 170              	>  .thumb_func
+ 170              	>  .weak HardFault_Handler
+ 170              	>  .type HardFault_Handler,%function
+ 170              	> HardFault_Handler:
+ 170 002a FEE7     	>  b .
+ 170              	>  .size HardFault_Handler,.-HardFault_Handler
+ 171              	    def_default_handler    SVC_Handler
+ 171              	>  .align 1
+ 171              	>  .thumb_func
+ 171              	>  .weak SVC_Handler
+ 171              	>  .type SVC_Handler,%function
+ 171              	> SVC_Handler:
+ 171 002c FEE7     	>  b .
+ 171              	>  .size SVC_Handler,.-SVC_Handler
+ 172              	    def_default_handler    PendSV_Handler
+ 172              	>  .align 1
+ 172              	>  .thumb_func
+ 172              	>  .weak PendSV_Handler
+ 172              	>  .type PendSV_Handler,%function
+ 172              	> PendSV_Handler:
+ 172 002e FEE7     	>  b .
+ 172              	>  .size PendSV_Handler,.-PendSV_Handler
+ 173              	    def_default_handler    SysTick_Handler
+ 173              	>  .align 1
+ 173              	>  .thumb_func
+ 173              	>  .weak SysTick_Handler
+ 173              	>  .type SysTick_Handler,%function
+ 173              	> SysTick_Handler:
+ 173 0030 FEE7     	>  b .
+ 173              	>  .size SysTick_Handler,.-SysTick_Handler
+ 174              	    def_default_handler    Default_Handler
+ 174              	>  .align 1
+ 174              	>  .thumb_func
+ 174              	>  .weak Default_Handler
+ 174              	>  .type Default_Handler,%function
+ 174              	> Default_Handler:
+ 174 0032 FEE7     	>  b .
+ 174              	>  .size Default_Handler,.-Default_Handler
+ 175              	
+ARM GAS  /tmp/cc6Q8Jtn.s 			page 5
+
+
+ 176              	    .weak    DEF_IRQHandler
+ 177              	    .set    DEF_IRQHandler, Default_Handler
+ 178              	
+ 179              	    .end
+ARM GAS  /tmp/cc6Q8Jtn.s 			page 6
+
+
+DEFINED SYMBOLS
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:36     .stack:00000000 $d
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:40     *ABS*:00000c00 Stack_Size
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:47     .stack:00000c00 __StackTop
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:44     .stack:00000000 __StackLimit
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:55     *ABS*:00000000 Heap_Size
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:59     .heap:00000000 __HeapBase
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:64     .heap:00000000 __HeapLimit
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:68     .isr_vector:00000000 $d
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:70     .isr_vector:00000000 __isr_vector
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:99     .text:00000000 Reset_Handler
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:169    .text:00000028 NMI_Handler
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:170    .text:0000002a HardFault_Handler
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:171    .text:0000002c SVC_Handler
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:172    .text:0000002e PendSV_Handler
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:173    .text:00000030 SysTick_Handler
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:174    .text:00000032 Default_Handler
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:96     .text:00000000 $t
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:153    .text:0000001a $d
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:153    .text:0000001c $d
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:169    .text:00000028 $t
+/home/wrcooke/git/projects/arm_gcc/src/startup.S:174    .text:00000032 DEF_IRQHandler
+
+UNDEFINED SYMBOLS
+__etext
+__data_start__
+__data_end__
+SystemInit
+main

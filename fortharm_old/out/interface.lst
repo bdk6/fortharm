@@ -1,0 +1,56 @@
+ARM GAS  /tmp/ccqO6nxa.s 			page 1
+
+
+   1              	# 1 "interface.S"
+   1              	/*****************************************************************************
+   1              	...
+   2              	fortharm  forth for arm cortex m0 (LPC1114)
+   0              	
+   3              	copyright(c) 2013 William R Cooke
+   4              	*/
+   5              	
+   6              	#include "defines.h"
+   1              	/*****************************************************************************
+   2              	fortharm  forth for arm cortex m0 (LPC1114)
+   3              	copyright(c) 2013 William R Cooke
+   4              	*/
+   5              	
+   6              		.thumb 
+   7              	
+   8              	#define PSP     sp
+   9              	#define RSP     r7
+  10              	#define IR      r6
+  11              	#define WA      r5
+  12              	#define CA      r4
+  13              	#define TOS     r3
+  14              	#define SCR0    r1
+  15              	#define SCR1    r2
+  16              	#define SCR2    r0
+  17              	
+  18              	#define SCR3    r8
+  19              	#define SCR4    r9
+  20              	#define SCR5    r10
+  21              	
+  22              	
+  23              	#define IMM     (1<<7)
+  24              	...
+   7              	
+   8              		.thumb
+   9              	        
+  10              		.data
+  11              	
+  12              	
+  13              		.bss
+  14              	    
+  15              		
+  16              		.text
+  17              		.balign 4
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+ARM GAS  /tmp/ccqO6nxa.s 			page 2
+
+
+NO DEFINED SYMBOLS
+
+NO UNDEFINED SYMBOLS

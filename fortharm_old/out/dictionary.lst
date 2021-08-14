@@ -1,0 +1,2427 @@
+ARM GAS  /tmp/ccrnNWhi.s 			page 1
+
+
+   1              	# 1 "dictionary.S"
+   1              	
+   1              	...
+   0              	
+   0              	
+   2              	#include "defines.h"
+   1              	/*****************************************************************************
+   2              	fortharm  forth for arm cortex m0 (LPC1114)
+   3              	copyright(c) 2013 William R Cooke
+   4              	*/
+   5              	
+   6              		.thumb 
+   7              	
+   8              	#define PSP     sp
+   9              	#define RSP     r7
+  10              	#define IR      r6
+  11              	#define WA      r5
+  12              	#define CA      r4
+  13              	#define TOS     r3
+  14              	#define SCR0    r1
+  15              	#define SCR1    r2
+  16              	#define SCR2    r0
+  17              	
+  18              	#define SCR3    r8
+  19              	#define SCR4    r9
+  20              	#define SCR5    r10
+  21              	
+  22              	
+  23              	#define IMM     (1<<7)
+  24              	...
+   3              	
+   4              	        
+   5              	
+   6              	/* core wordset from dpans 94 ch 6  133 words
+   7              	*/	
+   8              		.text
+   9              	
+  10              		.globl store
+  11              	__w_store:                                      @ ( x a-addr -- )            
+  12 0000 01       		.byte 1
+  13 0001 212020   		.ascii "!  "
+  14              	        .balign 4
+  15 0004 00000000 		.word 0
+  16              	__c_store:
+  17 0008 0D000000 	        .word .+5
+  18 000c 01BC     		pop     {r0}
+  19 000e 1860     		str     r0, [TOS]
+  20 0010 08BC     		pop     {TOS}
+  21 0012 FEE7     		b       next
+  22              		
+  23              	
+  24              		.globl __w_number_sign
+  25              	__w_number_sign:                                @ ( ud1 -- ud2 ) 
+  26 0014 01       		.byte 1
+  27 0015 23       		.ascii "#"
+  28 0016 C046     	        .balign 4
+  29 0018 00000000 		.word __w_store
+ARM GAS  /tmp/ccrnNWhi.s 			page 2
+
+
+  30              	__c_number_sign:
+  31 001c 21000000 	        .word .+5
+  32              	
+  33 0020 FEE7     	        b       next
+  34              	
+  35              		.globl __w_number_sign_greater
+  36              	__w_number_sign_greater:                        @ ( xd -- c-addr u )
+  37 0022 02       		.byte 2
+  38 0023 233E     		.ascii  "#>"
+  39 0025 00C046   	        .balign 4
+  40 0028 00000000 		.word   __w_number_sign
+  41              	__c_number_sign_greater:        
+  42 002c 31000000 		.word   .+5
+  43              	
+  44 0030 FEE7     	        b       next
+  45              	
+  46              	        
+  47              		.globl  __w_number_sign_s
+  48              	__w_number_sign_s:                              @ ( ud1 -- ud2)
+  49 0032 02       	        .byte   2
+  50 0033 2373     	        .ascii  "#s"
+  51 0035 00C046   	        .balign 4
+  52 0038 00000000 	        .word   __w_number_sign_greater
+  53              	__c_number_sign_s:      
+  54 003c 41000000 	        .word   .+5
+  55              	
+  56 0040 FEE7     	        b       next
+  57              	
+  58              	        
+  59              		.globl  __w_tick
+  60              	__w_tick:                                       @ ( "<spaces>name" -- xt )
+  61 0042 01       	        .byte   1
+  62 0043 27       	        .ascii  "'"
+  63              	        .balign 4
+  64 0044 00000000 	        .word   __w_number_sign_s
+  65              	__c_tick:       
+  66 0048 4D000000 	        .word   .+5
+  67              	
+  68 004c FEE7     	        b       next
+  69              	
+  70              	        
+  71              		.globl __w_paren
+  72              	__w_paren:                                      @ ( "ccc<paren>" -- )
+  73 004e 81       	        .byte   1+IMM
+  74 004f 28       	        .ascii  "("
+  75              	        .balign 4
+  76 0050 00000000 	        .word   __w_tick
+  77              	__c_paren:
+  78 0054 59000000 	        .word .+5
+  79              	
+  80 0058 FEE7     	        b       next
+  81              	        
+  82              	
+  83              		.globl __w_star
+  84              	__w_star:                                       @ ( n1|u1 n2|u2 -- n3|u3 )
+  85 005a 01       	        .byte   1
+  86 005b 2A       	        .ascii  "*"
+ARM GAS  /tmp/ccrnNWhi.s 			page 3
+
+
+  87              	        .balign 4
+  88 005c 00000000 	        .word __w_paren
+  89              	__c_star:
+  90 0060 65000000 	        .word .+5
+  91 0064 01BC     	        pop     {r0}
+  92 0066 4343     	        mul     TOS, r0, TOS
+  93 0068 FEE7     	        b       next
+  94              	
+  95              	        
+  96              		.globl __w_star_slash
+  97              	__w_star_slash:                                 @ ( n1 n2 n3 -- n4 )
+  98 006a 02       	        .byte   2
+  99 006b 2A2F     	        .ascii  "*/"
+ 100 006d 00C046   	        .balign 4
+ 101 0070 00000000 	        .word   __w_star
+ 102              	__c_star_slash:
+ 103 0074 79000000 	        .word   .+5
+ 104              	        
+ 105              	
+ 106              		.globl __w_star_slash_mod
+ 107              	__w_star_slash_mod:                             @ ( n1 n2 n3 -- n4 )
+ 108 0078 05       	        .byte   5
+ 109 0079 2A2F4D4F 	        .ascii  "*/MOD"
+ 109      44
+ 110 007e C046     	        .balign 4
+ 111 0080 00000000 	        .word   __w_star_slash
+ 112              	__c_star_slash_mod:
+ 113 0084 89000000 	        .word .+5
+ 114              	
+ 115 0088 FEE7     	        b next
+ 116              	        
+ 117              	
+ 118              		.globl __w_plus
+ 119              	__w_plus:                                       @ ( n1|u1 n2|u2 -- n3|u3 )
+ 120 008a 01       	        .byte   1
+ 121 008b 2B       	        .ascii  "+"
+ 122              	        .balign 4
+ 123 008c 00000000 	        .word   __w_star_slash_mod
+ 124              	__c_plus:
+ 125 0090 95000000 	        .word   .+5
+ 126 0094 01BC     	        pop     {r0}
+ 127 0096 C318     	        add     TOS, r0, TOS
+ 128 0098 FEE7     	        b       next
+ 129              	
+ 130              	        
+ 131              		.globl __w_plus_store
+ 132              	__w_plus_store:                                 @ ( n|u a-addr -- )
+ 133 009a 02       	        .byte   2
+ 134 009b 2B21     	        .ascii  "+!"
+ 135 009d 00C046   	        .balign 4
+ 136 00a0 00000000 	        .word   __w_plus
+ 137              	__c_plus_store:
+ 138 00a4 A9000000 	        .word .+5
+ 139 00a8 01BC     	        pop     {r0}
+ 140 00aa 1860     	        str     r0, [TOS]
+ 141 00ac 08BC     	        pop     {TOS}
+ 142 00ae FEE7     	        b       next
+ARM GAS  /tmp/ccrnNWhi.s 			page 4
+
+
+ 143              	        
+ 144              	
+ 145              		.globl __w_plus_loop
+ 146              	__w_plus_loop:                                  @ ( C: do-sys -- )
+ 147 00b0 05       	        .byte   5
+ 148 00b1 2B4C4F4F 	        .ascii  "+LOOP"
+ 148      50
+ 149 00b6 C046     	        .balign 4
+ 150 00b8 00000000 	        .word   __w_plus_store
+ 151              	__c_plus_loop:
+ 152 00bc C1000000 	        .word   .+5
+ 153              	
+ 154 00c0 FEE7     	        b       next
+ 155              	        
+ 156              	
+ 157              		.globl __w_comma
+ 158              	__w_comma:                                      @ ( x -- )
+ 159 00c2 01       	        .byte   1
+ 160 00c3 2C       	        .ascii  ","
+ 161              	        .balign 4
+ 162 00c4 00000000 	        .word   __w_plus_loop
+ 163              	__c_comma:
+ 164 00c8 CD000000 	        .word   .+5
+ 165              	
+ 166 00cc FEE7     	        b       next
+ 167              	
+ 168              		.globl __w_minus
+ 169              	__w_minus:                                      @ ( n1|u1 n2|u2 -- n3|u3 )
+ 170 00ce 01       	        .byte   1
+ 171 00cf 2D       	        .ascii  "-"
+ 172              	        .balign 4
+ 173 00d0 00000000 	        .word   __w_comma
+ 174              	__c_minus:
+ 175 00d4 D9000000 	        .word   . + 5
+ 176 00d8 01BC     	        pop     {r0}
+ 177 00da C31A     	        sub     TOS, r0, TOS
+ 178 00dc FEE7     	        b       next
+ 179              	        
+ 180              	
+ 181              		.globl __w_dot
+ 182              	__w_dot:                                        @ ( n -- )
+ 183 00de 01       	        .byte 1
+ 184 00df 2E       	        .ascii  "."
+ 185              	        .balign 4
+ 186 00e0 00000000 	        .word __w_minus
+ 187              	__c_dot:
+ 188 00e4 E9000000 	        .word   .+5
+ 189              	
+ 190 00e8 FEE7     	        b next
+ 191              	
+ 192              	        
+ 193              		.globl __w_dot_quote
+ 194              	__w_dot_quote:                                  // ( "ccc<quote>" -- )
+ 195 00ea 02       	        .byte   2
+ 196 00eb 2E22     	        .ascii  ".\""
+ 197 00ed 00C046   	        .balign 4
+ 198 00f0 00000000 	        .word   __w_dot
+ARM GAS  /tmp/ccrnNWhi.s 			page 5
+
+
+ 199              	__c_dot_quote:
+ 200 00f4 F9000000 	        .word   .+5
+ 201              	
+ 202 00f8 FEE7     	        b       next
+ 203              	        
+ 204              	
+ 205              		.globl __w_slash
+ 206              	__w_slash:                                      @ ( n1 n2 -- n3 )
+ 207 00fa 01       	        .byte   1
+ 208 00fb 2F       	        .ascii  "/"
+ 209              	        .balign 4
+ 210 00fc 00000000 	        .word __w_dot_quote
+ 211              	__c_slash:
+ 212 0100 05010000 	        .word   .+5
+ 213              	
+ 214 0104 FEE7     	        b       next
+ 215              	        
+ 216              	
+ 217              		.globl __w_slash_mod
+ 218              	__w_slash_mod:                                  @ ( n1 n2 -- n3 n4 )
+ 219 0106 04       	        .byte   4
+ 220 0107 2F4D4F44 	        .ascii  "/MOD"
+ 221 010b 00       	        .balign 4
+ 222 010c 00000000 	        .word   __w_slash
+ 223              	__c_slash_mod:
+ 224 0110 15010000 	        .word   .+5
+ 225              	
+ 226 0114 FEE7     	        b       next
+ 227              	        
+ 228              	
+ 229              		.globl __w_zero_less
+ 230              	__w_zero_less:                                  @ ( n -- flag )
+ 231 0116 02       	        .byte   2
+ 232 0117 303C     	        .ascii  "0<"
+ 233 0119 00C046   	        .balign 4
+ 234 011c 00000000 	        .word   __w_slash_mod
+ 235              	__c_zero_mod:
+ 236 0120 25010000 	        .word   .+5
+ 237              	
+ 238 0124 FEE7     	        b       next
+ 239              	        
+ 240              	
+ 241              	__w_zero_equals:                                @ ( n -- flag )
+ 242 0126 02       	        .byte   2
+ 243 0127 303D     	        .ascii  "0="
+ 244 0129 00C046   	        .balign 4
+ 245 012c 26010000 	        .word   __w_zero_equals
+ 246              	__c_zero_equals:
+ 247 0130 35010000 	        .word   .+5
+ 248              	
+ 249 0134 FEE7     	        b       next
+ 250              	
+ 251              	__w_one_plus:                                   @ ( n1|u1 -- n2|u2 )
+ 252 0136 02       	        .byte   2
+ 253 0137 312B     	        .ascii  "1+"
+ 254 0139 00C046   	        .balign 4
+ 255 013c 26010000 	        .word   __w_zero_equals
+ARM GAS  /tmp/ccrnNWhi.s 			page 6
+
+
+ 256              	__c_one_plus:
+ 257 0140 45010000 	        .word   .+5
+ 258 0144 0133     	        add     TOS, #1
+ 259 0146 FEE7     	        b       next
+ 260              	        
+ 261              	
+ 262              	__w_one_minus:                                  @ ( n1|u1 -- n2|u2 )
+ 263 0148 02       	        .byte   2
+ 264 0149 312D     	        .ascii  "1-"
+ 265 014b 00       	        .balign 4
+ 266 014c 36010000 	        .word   __w_one_plus
+ 267              	__c_one_minus:
+ 268 0150 55010000 	        .word   .+5
+ 269 0154 013B     	        sub     TOS, #1
+ 270 0156 FEE7     	        b       next
+ 271              	
+ 272              	        
+ 273              	__w_two_store:                                  @ ( x1 x2 a-addr -- )
+ 274 0158 02       	        .byte   2
+ 275 0159 3221     	        .ascii  "2!"
+ 276 015b 00       	        .balign 4
+ 277 015c 48010000 	        .word   __w_one_minus
+ 278              	__c_two_store:
+ 279 0160 65010000 	        .word   .+5
+ 280              	
+ 281 0164 FEE7     	        b       next
+ 282              	        
+ 283              	
+ 284              	__w_two_star:                                   @ ( x1 -- x2 )
+ 285 0166 02       	        .byte   2
+ 286 0167 322A     	        .ascii  "2*"
+ 287 0169 00C046   	        .balign 4
+ 288 016c 58010000 	        .word   __w_two_store
+ 289              	__c_two_star:
+ 290 0170 75010000 	        .word   .+5
+ 291              	
+ 292 0174 FEE7     	        b       next
+ 293              	        
+ 294              	
+ 295              	__w_two_slash:                                  @ ( x1 -- x2 )
+ 296 0176 02       	        .byte   2
+ 297 0177 322F     	        .ascii  "2/"
+ 298 0179 00C046   	        .balign 4
+ 299 017c 66010000 	        .word   __w_two_star
+ 300              	__c_two_slash:
+ 301 0180 85010000 	        .word   .+5
+ 302 0184 FEE7     	        b       next
+ 303              	        
+ 304              	
+ 305              	__w_two_fetch:                                  @ ( a-addr -- x1 x2 )
+ 306 0186 02       	        .byte   2
+ 307 0187 3240     	        .ascii  "2@"
+ 308 0189 00C046   	        .balign 4
+ 309 018c 76010000 	        .word   __w_two_slash
+ 310              	__c_two_fetch:
+ 311 0190 95010000 	        .word   .+5
+ 312 0194 FEE7     	        b       next
+ARM GAS  /tmp/ccrnNWhi.s 			page 7
+
+
+ 313              	        
+ 314              	
+ 315              	__w_two_drop:                                   @ ( x1 x2 -- )
+ 316 0196 05       	        .byte   5
+ 317 0197 3244524F 	        .ascii  "2DROP"
+ 317      50
+ 318              	        .balign 4
+ 319 019c 86010000 	        .word   __w_two_fetch
+ 320              	__c_two_drop:
+ 321 01a0 A5010000 	        .word   .+5
+ 322 01a4 FEE7     	        b       next
+ 323              	        
+ 324              	
+ 325              	__w_two_dupe:                                   @ ( x1 x2 -- x1 x2 x1 x2 )
+ 326 01a6 04       	        .byte   4
+ 327 01a7 32445550 	        .ascii  "2DUP"
+ 328 01ab 00       	        .balign 4
+ 329 01ac 96010000 	        .word   __w_two_drop
+ 330              	__c_two_dupe:
+ 331 01b0 B5010000 	        .word   .+5
+ 332 01b4 FEE7     	        b       next
+ 333              	        
+ 334              	
+ 335              	__w_two_over:                                   @ ( x1 x2 x3 x4 -- x1 x2 x3 x4 x1 x2 )
+ 336 01b6 05       	        .byte   5
+ 337 01b7 324F5645 	        .ascii  "2OVER"
+ 337      52
+ 338              	        .balign 4
+ 339 01bc A6010000 	        .word   __w_two_dupe
+ 340              	__c_two_over:
+ 341 01c0 C5010000 	        .word   .+5
+ 342 01c4 FEE7     	        b       next
+ 343              	
+ 344              		
+ 345              	__w_two_swap:                                   @ ( x1 x2 x3 x4 -- x3 x4 x1 x2 )
+ 346 01c6 05       	        .byte   5
+ 347 01c7 32535741 	        .ascii  "2SWAP"
+ 347      50
+ 348              	        .balign 4
+ 349 01cc B6010000 	        .word   __w_two_over
+ 350              	__c_two_swap:
+ 351 01d0 D5010000 	        .word   .+5
+ 352 01d4 FEE7     	        b       next
+ 353              	        
+ 354              	
+ 355              	__w_colon:                                      @ ( C: "<spaces>name" -- colon-sys )
+ 356 01d6 01       	        .byte   1
+ 357 01d7 3A       	        .ascii  ":"
+ 358              	        .balign 4
+ 359 01d8 C6010000 	        .word   __w_two_swap
+ 360              	__c_colon:
+ 361 01dc E1010000 	        .word   .+5
+ 362 01e0 FEE7     	        b       next
+ 363              	        
+ 364              	
+ 365              	__w_semicolon:                                  @ ( C: colon-sys -- )
+ 366 01e2 01       	        .byte   1
+ARM GAS  /tmp/ccrnNWhi.s 			page 8
+
+
+ 367 01e3 3B       	        .ascii  ";"
+ 368              	        .balign 4
+ 369 01e4 D6010000 	        .word   __w_colon
+ 370              	__c_semicolon:
+ 371 01e8 ED010000 	        .word   .+5
+ 372 01ec FEE7     	        b       next
+ 373              	        
+ 374              	
+ 375              	__w_less_than:                                  @ ( n1 n2 -- flag )
+ 376 01ee 01       	        .byte   1
+ 377 01ef 3C       	        .ascii  "<"
+ 378              	        .balign 4
+ 379 01f0 E2010000 	        .word   __w_semicolon
+ 380              	__c_less_than:
+ 381 01f4 F9010000 	        .word   .+5
+ 382 01f8 FEE7     	        b       next
+ 383              	        
+ 384              	
+ 385              	__w_less_number_sign:                           @ ( -- )
+ 386 01fa 02       	        .byte   2
+ 387 01fb 3C23     	        .ascii  "<#"
+ 388 01fd 00C046   	        .balign 4
+ 389 0200 EE010000 	        .word   __w_less_than
+ 390              	__c_less_number_sign:
+ 391 0204 09020000 	        .word   .+5
+ 392 0208 FEE7     	        b       next
+ 393              	        
+ 394              	
+ 395              	__w_equals:                                     @ ( x1 x2 -- flag )
+ 396 020a 01       	        .byte   1
+ 397 020b 3D       	        .ascii  "="
+ 398              	        .balign 4
+ 399 020c FA010000 	        .word   __w_less_number_sign
+ 400              	__c_equals:
+ 401 0210 15020000 	        .word   .+5
+ 402 0214 FEE7     	        b       next
+ 403              	        
+ 404              	
+ 405              	__w_greater_than:                               @ ( n1 n2 -- flag )
+ 406 0216 01       	        .byte   1
+ 407 0217 3E       	        .ascii  ">"
+ 408              	        .balign 4
+ 409 0218 0A020000 	        .word   __w_equals
+ 410              	__c_greater_than:
+ 411 021c 21020000 	        .word   .+5
+ 412 0220 FEE7     	        b       next
+ 413              	        
+ 414              	
+ 415              	__w_to_body:                                    @ ( xt -- a-addr )
+ 416 0222 05       	        .byte   5
+ 417 0223 3E424F44 	        .ascii  ">BODY"
+ 417      59
+ 418              	        .balign 4
+ 419 0228 16020000 	        .word   __w_greater_than
+ 420              	__c_to_body:
+ 421 022c 31020000 	        .word   .+5
+ 422 0230 FEE7     	        b       next
+ARM GAS  /tmp/ccrnNWhi.s 			page 9
+
+
+ 423              	        
+ 424              	
+ 425              	__w_to_in:                                      @ ( -- a-addr )
+ 426 0232 03       	        .byte   3
+ 427 0233 3E494E   	        .ascii  ">IN"
+ 428 0236 C046     	        .balign 4
+ 429 0238 22020000 	        .word   __w_to_body
+ 430              	__c_to_in:
+ 431 023c 41020000 	        .word   .+5
+ 432 0240 FEE7     	        b       next
+ 433              	        
+ 434              	
+ 435              	__w_to_number:                                  @ ( ud1 c-addr1 u1 -- ud2 c-addr2 u2 )
+ 436 0242 07       	        .byte   7
+ 437 0243 3E4E554D 	        .ascii  ">NUMBER"
+ 437      424552
+ 438 024a C046     	        .balign 4
+ 439 024c 32020000 	        .word   __w_to_in
+ 440              	__c_to_number:
+ 441 0250 55020000 	        .word   .+5
+ 442 0254 FEE7     	        b       next
+ 443              	        
+ 444              	
+ 445              	__w_to_r:                                       @ (x -- ) ( R: -- x )
+ 446 0256 02       	        .byte   2
+ 447 0257 3E52     	        .ascii  ">R"
+ 448 0259 00C046   	        .balign 4
+ 449 025c 42020000 	        .word   __w_to_number
+ 450              	__c_to_r:
+ 451 0260 65020000 	        .word   .+5
+ 452 0264 FEE7     	        b       next
+ 453              	        
+ 454              	
+ 455              	__w_question_dupe:                              @ ( x -- 0 | x x )
+ 456 0266 04       	        .byte   4
+ 457 0267 3F445550 	        .ascii  "?DUP"
+ 458 026b 00       	        .balign 4
+ 459 026c 56020000 	        .word   __w_to_r
+ 460              	__c_question_dupe:
+ 461 0270 75020000 	        .word   .+5
+ 462 0274 FEE7     	        b       next
+ 463              	        
+ 464              	
+ 465              	__w_fetch:                                      @ ( a-addr -- x )
+ 466 0276 01       	        .byte   1
+ 467 0277 40       	        .ascii  "@"
+ 468              	        .balign 4
+ 469 0278 66020000 	        .word   __w_question_dupe
+ 470              	__c_fetch:
+ 471 027c 81020000 	        .word   .+5
+ 472 0280 FEE7     	        b       next
+ 473              	        
+ 474              	
+ 475              	__w_abort:                                      @ ( i*x -- ) ( R: j*x -- )
+ 476 0282 05       	        .byte   5
+ 477 0283 41424F52 	        .ascii  "ABORT"
+ 477      54
+ARM GAS  /tmp/ccrnNWhi.s 			page 10
+
+
+ 478              	        .balign 4
+ 479 0288 76020000 	        .word   __w_fetch
+ 480              	__c_abort:
+ 481 028c 91020000 	        .word   .+5
+ 482 0290 FEE7     	        b       next
+ 483              	        
+ 484              	
+ 485              	__w_abort_quote:                                @ ( "ccc<quote>" -- )
+ 486 0292 06       	        .byte   6
+ 487 0293 41424F52 	        .ascii  "ABORT\""
+ 487      5422
+ 488 0299 00C046   	        .balign 4
+ 489 029c 82020000 	        .word   __w_abort
+ 490              	__c_abort_quote:
+ 491 02a0 A5020000 	        .word   .+5
+ 492 02a4 FEE7     	        b       next
+ 493              	        
+ 494              	
+ 495              	__w_abs:                                        @ ( n -- u )
+ 496 02a6 03       	        .byte   3
+ 497 02a7 414253   	        .ascii  "ABS"
+ 498 02aa C046     	        .balign 4
+ 499 02ac 92020000 	        .word   __w_abort_quote
+ 500              	__c_abs:
+ 501 02b0 B5020000 	        .word   .+5
+ 502 02b4 FEE7     	        b       next
+ 503              	        
+ 504              	
+ 505              	__w_accept:                                     @ ( c-addr +n1 -- +n2 )
+ 506 02b6 06       	        .byte   6
+ 507 02b7 41434345 	        .ascii  "ACCEPT"
+ 507      5054
+ 508 02bd 00C046   	        .balign 4
+ 509 02c0 A6020000 	        .word   __w_abs
+ 510              	__c_accept:
+ 511 02c4 C9020000 	        .word   .+5
+ 512 02c8 FEE7     	        b       next
+ 513              	        
+ 514              	
+ 515              	__w_align:                                      @ ( -- )
+ 516 02ca 05       	        .byte   5
+ 517 02cb 414C4947 	        .ascii  "ALIGN"
+ 517      4E
+ 518              	        .balign 4
+ 519 02d0 B6020000 	        .word   __w_accept
+ 520              	__c_align:
+ 521 02d4 D9020000 	        .word   .+5
+ 522 02d8 FEE7     	        b       next
+ 523              	        
+ 524              	
+ 525              	__w_aligned:                                    @ ( addr -- a-addr )
+ 526 02da 07       	        .byte   7
+ 527 02db 414C4947 	        .ascii  "ALIGNED"
+ 527      4E4544
+ 528 02e2 C046     	        .balign 4
+ 529 02e4 CA020000 	        .word   __w_align
+ 530              	__c_aligned:
+ARM GAS  /tmp/ccrnNWhi.s 			page 11
+
+
+ 531 02e8 ED020000 	        .word   .+5
+ 532 02ec FEE7     	        b       next
+ 533              	        
+ 534              	
+ 535              	__w_allot:                                      @ ( n -- )
+ 536 02ee 05       	        .byte   5
+ 537 02ef 414C4C4F 	        .ascii  "ALLOT"
+ 537      54
+ 538              	        .balign 4
+ 539 02f4 DA020000 	        .word   __w_aligned
+ 540              	__c_allot:
+ 541 02f8 FD020000 	        .word   .+5
+ 542 02fc FEE7     	        b       next
+ 543              	        
+ 544              	
+ 545              	__w_and:                                        @ ( x1 x2 -- x3 )
+ 546 02fe 03       	        .byte   3
+ 547 02ff 414E44   	        .ascii  "AND"
+ 548 0302 C046     	        .balign 4
+ 549 0304 EE020000 	        .word   __w_allot
+ 550              	__c_and:
+ 551 0308 0D030000 	        .word   .+5
+ 552 030c FEE7     	        b       next
+ 553              	        
+ 554              	
+ 555              	__w_base:                                       @ ( -- a-addr )
+ 556 030e 04       	        .byte   4
+ 557 030f 42415345 	        .ascii  "BASE"
+ 558 0313 00       	        .balign 4
+ 559 0314 FE020000 	        .word   __w_and
+ 560              	__c_base:
+ 561 0318 1D030000 	        .word   .+5
+ 562 031c FEE7     	        b       next
+ 563              	        
+ 564              	
+ 565              	__w_begin:                                      @ ( C: -- dest )
+ 566 031e 05       	        .byte   5
+ 567 031f 42454749 	        .ascii  "BEGIN"
+ 567      4E
+ 568              	        .balign 4
+ 569 0324 0E030000 	        .word   __w_base
+ 570              	__c_begin:
+ 571 0328 2D030000 	        .word   .+5
+ 572 032c FEE7     	        b       next
+ 573              	        
+ 574              	
+ 575              	__w_bl:                                         @ ( -- char )
+ 576 032e 02       	        .byte   2
+ 577 032f 424C     	        .ascii  "BL"
+ 578 0331 00C046   	        .balign 4
+ 579 0334 1E030000 	        .word   __w_begin
+ 580              	__c_bl:
+ 581 0338 3D030000 	        .word   .+5
+ 582 033c FEE7     	        b       next
+ 583              	        
+ 584              	
+ 585              	__w_c_store:                                    @ ( char c-addr -- )
+ARM GAS  /tmp/ccrnNWhi.s 			page 12
+
+
+ 586 033e 02       	        .byte   2
+ 587 033f 4321     	        .ascii  "C!"
+ 588 0341 00C046   	        .balign 4
+ 589 0344 2E030000 	        .word   __w_bl
+ 590              	__c_c_store:
+ 591 0348 4D030000 	        .word   .+5
+ 592 034c FEE7     	        b       next
+ 593              	        
+ 594              	
+ 595              	__w_c_comma:                                    @ ( char -- )
+ 596 034e 02       	        .byte   2
+ 597 034f 432C     	        .ascii  "C,"
+ 598 0351 00C046   	        .balign 4
+ 599 0354 3E030000 	        .word   __w_c_store
+ 600              	__c_c_comma:
+ 601 0358 5D030000 	        .word   .+5
+ 602 035c FEE7     	        b       next
+ 603              	        
+ 604              	
+ 605              	__w_c_fetch:                                    @ ( c-addr -- char )
+ 606 035e 02       	        .byte   2
+ 607 035f 4340     	        .ascii  "C@"
+ 608 0361 00C046   	        .balign 4
+ 609 0364 4E030000 	        .word   __w_c_comma
+ 610              	__c_c_fetch:
+ 611 0368 6D030000 	        .word   .+5
+ 612 036c FEE7     	        b       next
+ 613              	        
+ 614              	
+ 615              	__w_cell_plus:                                  @ ( a-addr1 -- a-addr2 )
+ 616 036e 05       	        .byte   5
+ 617 036f 43454C4C 	        .ascii  "CELL+"
+ 617      2B
+ 618              	        .balign 4
+ 619 0374 5E030000 	        .word   __w_c_fetch
+ 620              	__c_cell_plus:
+ 621 0378 7D030000 	        .word   .+5
+ 622 037c FEE7     	        b       next
+ 623              	        
+ 624              	
+ 625              	__w_cells:                                      @ ( n1 -- n2 )
+ 626 037e 05       	        .byte   5
+ 627 037f 43454C4C 	        .ascii  "CELLS"
+ 627      53
+ 628              	        .balign 4
+ 629 0384 6E030000 	        .word   __w_cell_plus
+ 630              	__c_cells:
+ 631 0388 8D030000 	        .word   .+5
+ 632 038c 9B00     	        lsl     TOS, #2
+ 633 038e FEE7     	        b       next
+ 634              	        
+ 635              	
+ 636              	__w_char:                                       @ ( "<spaces>name" -- char )
+ 637 0390 04       	        .byte   4
+ 638 0391 43484152 	        .ascii  "CHAR"
+ 639 0395 00C046   	        .balign 4
+ 640 0398 7E030000 	        .word   __w_cells
+ARM GAS  /tmp/ccrnNWhi.s 			page 13
+
+
+ 641              	__c_char:
+ 642 039c A1030000 	        .word   .+5
+ 643 03a0 FEE7     	        b       next
+ 644              	        
+ 645              	
+ 646              	__w_char_plus:                                  // ( c-addr1 -- c-addr2 )
+ 647 03a2 05       	        .byte   5
+ 648 03a3 43484152 	        .ascii  "CHAR+"
+ 648      2B
+ 649              	        .balign 4
+ 650 03a8 90030000 	        .word   __w_char
+ 651              	__c_char_plus:
+ 652 03ac B1030000 	        .word   .+5
+ 653 03b0 FEE7     	        b       next
+ 654              	
+ 655              	__w_chars:                                      // ( n1 -- n2 )
+ 656 03b2 05       	        .byte   5
+ 657 03b3 43484152 	        .ascii  "CHARS"
+ 657      53
+ 658              	        .balign 4
+ 659 03b8 A2030000 	        .word   __w_char_plus
+ 660              	__c_chars:
+ 661 03bc C1030000 	        .word   .+5
+ 662 03c0 FEE7     	        b       next
+ 663              	        
+ 664              	
+ 665              	__w_constant:                                   // ( x "<spaces>name" -- )
+ 666 03c2 08       	        .byte   8
+ 667 03c3 434F4E53 	        .ascii  "CONSTANT"
+ 667      54414E54 
+ 668 03cb 00       	        .balign 4
+ 669 03cc B2030000 	        .word   __w_chars
+ 670              	__c_constant:
+ 671 03d0 D5030000 	        .word   .+5
+ 672 03d4 FEE7     	        b       next
+ 673              	        
+ 674              	
+ 675              	__w_count:                                      // ( c-addr1 -- c-addr2 u )
+ 676 03d6 05       	        .byte   5
+ 677 03d7 434F554E 	        .ascii  "COUNT"
+ 677      54
+ 678              	        .balign 4
+ 679 03dc C2030000 	        .word   __w_constant
+ 680              	__c_count:
+ 681 03e0 E5030000 	        .word   .+5
+ 682 03e4 FEE7     	        b       next
+ 683              	        
+ 684              	
+ 685              	__w_cr:                                         // ( -- )
+ 686 03e6 02       	        .byte   2
+ 687 03e7 4352     	        .ascii  "CR"
+ 688 03e9 00C046   	        .balign 4
+ 689 03ec D6030000 	        .word   __w_count
+ 690              	__c_cr:
+ 691 03f0 F5030000 	        .word   .+5
+ 692 03f4 FEE7     	        b       next
+ 693              	        
+ARM GAS  /tmp/ccrnNWhi.s 			page 14
+
+
+ 694              	
+ 695              	__w_create:                                     // ( "<spaces>name" -- )
+ 696 03f6 06       	        .byte   6
+ 697 03f7 43524541 	        .ascii  "CREATE"
+ 697      5445
+ 698 03fd 00C046   	        .balign 4
+ 699 0400 E6030000 	        .word   __w_cr
+ 700              	__c_create:
+ 701 0404 09040000 	        .word   .+5
+ 702 0408 FEE7     	        b       next
+ 703              	        
+ 704              	
+ 705              	__w_decimal:                                    // ( -- )
+ 706 040a 07       	        .byte   7
+ 707 040b 44454349 	        .ascii  "DECIMAL"
+ 707      4D414C
+ 708 0412 C046     	        .balign 4
+ 709 0414 F6030000 	        .word   __w_create
+ 710              	__c_decimal:
+ 711 0418 1D040000 	        .word   .+5
+ 712 041c FEE7     	        b       next
+ 713              	        
+ 714              	
+ 715              	__w_depth:                                      // ( -- +n )
+ 716 041e 05       	        .byte   5
+ 717 041f 44455054 	        .ascii  "DEPTH"
+ 717      48
+ 718              	        .balign 4
+ 719 0424 0A040000 	        .word   __w_decimal
+ 720              	__c_depth:
+ 721 0428 2D040000 	        .word   .+5
+ 722 042c FEE7     	        b       next
+ 723              	        
+ 724              	
+ 725              	__w_do:                                         // ( C: -- do-sys )  ( n1|u1 n2|u2 -- ) ( R: -- loo
+ 726 042e 02       	        .byte   2
+ 727 042f 444F     	        .ascii  "DO"
+ 728 0431 00C046   	        .balign 4
+ 729 0434 1E040000 	        .word   __w_depth
+ 730              	__c_do:
+ 731 0438 3D040000 	        .word   .+5
+ 732 043c FEE7     	        b       next
+ 733              	        
+ 734              	
+ 735              	__w_does:                                       // ( C: colon-sys1 -- colon-sys2 )
+ 736 043e 05       	        .byte   5
+ 737 043f 444F4553 	        .ascii  "DOES>"
+ 737      3E
+ 738              	        .balign 4
+ 739 0444 2E040000 	        .word   __w_do
+ 740              	__c_does:
+ 741 0448 4D040000 	        .word   .+5
+ 742 044c FEE7     	        b       next
+ 743              	        
+ 744              	
+ 745              	__w_drop:                                       // ( x -- )
+ 746 044e 04       	        .byte   4
+ARM GAS  /tmp/ccrnNWhi.s 			page 15
+
+
+ 747 044f 44524F50 	        .ascii  "DROP"
+ 748 0453 00       	        .balign 4
+ 749 0454 3E040000 	        .word   __w_does
+ 750              	__c_drop:
+ 751 0458 5D040000 	        .word   .+5
+ 752 045c 08BC     	        pop     {TOS}
+ 753 045e FEE7     	        b       next
+ 754              	        
+ 755              	
+ 756              	__w_dupe:                                       // ( x -- x x )
+ 757 0460 03       	        .byte   3
+ 758 0461 445550   	        .ascii  "DUP"
+ 759              	        .balign 4
+ 760 0464 4E040000 	        .word   __w_drop
+ 761              	__c_dupe:
+ 762 0468 6D040000 	        .word   .+5
+ 763 046c 08B4     	        push    {TOS}
+ 764 046e FEE7     	        b       next
+ 765              	        
+ 766              	
+ 767              	__w_else:                                       // ( C: orig1 -- orig2 )
+ 768 0470 04       	        .byte   4
+ 769 0471 454C5345 	        .ascii  "ELSE"
+ 770 0475 00C046   	        .balign 4
+ 771 0478 60040000 	        .word   __w_dupe
+ 772              	__c_else:
+ 773 047c 81040000 	        .word   .+5
+ 774 0480 FEE7     	        b       next
+ 775              	        
+ 776              	
+ 777              	__w_emit:                                       // ( x -- )
+ 778 0482 04       	        .byte   4
+ 779 0483 454D4954 	        .ascii  "EMIT"
+ 780 0487 00       	        .balign 4
+ 781 0488 70040000 	        .word   __w_else
+ 782              	__c_emit:
+ 783 048c 91040000 	        .word   .+5
+ 784 0490 FEE7     	        b       next
+ 785              	        
+ 786              	
+ 787              	__w_environment_query:                          // ( c-addr u -- false | i*x true )
+ 788 0492 0C       	        .byte 12
+ 789 0493 454E5649 	        .ascii  "ENVIRONMENT?"
+ 789      524F4E4D 
+ 789      454E543F 
+ 790 049f 00       	        .balign 4
+ 791 04a0 82040000 	        .word   __w_emit
+ 792              	__c_environment_query:
+ 793 04a4 A9040000 	        .word   .+5
+ 794 04a8 FEE7     	        b       next
+ 795              	        
+ 796              	
+ 797              	__w_evaluate:                                   // ( i*x c-addr u -- j*x )
+ 798 04aa 08       	        .byte   8
+ 799 04ab 4556414C 	        .ascii  "EVALUATE"
+ 799      55415445 
+ 800 04b3 00       	        .balign 4
+ARM GAS  /tmp/ccrnNWhi.s 			page 16
+
+
+ 801 04b4 92040000 	        .word   __w_environment_query
+ 802              	__c_evaluate:
+ 803 04b8 BD040000 	        .word   .+5
+ 804 04bc FEE7     	        b       next
+ 805              	        
+ 806              	
+ 807              	__w_execute:                                    // ( i*x xt -- j*x )
+ 808 04be 07       		.byte   7
+ 809 04bf 45584543 	        .ascii  "EXECUTE"
+ 809      555445
+ 810 04c6 C046     	        .balign 4
+ 811 04c8 AA040000 	        .word   __w_evaluate
+ 812              	__c_execute:
+ 813 04cc D1040000 	        .word   .+5
+ 814 04d0 FEE7     	        b       next
+ 815              	        
+ 816              		
+ 817              	__w_exit:                                       // ( -- ) ( R: nest-sys -- )
+ 818 04d2 04       	        .byte   4
+ 819 04d3 45584954 	        .ascii  "EXIT"
+ 820 04d7 00       	        .balign 4
+ 821 04d8 BE040000 	        .word   __w_execute
+ 822              	__c_exit:
+ 823 04dc E1040000 	        .word   .+5
+ 824 04e0 FEE7     	        b       next
+ 825              	        
+ 826              	
+ 827              	__w_fill:                                       // ( c-addr u char -- )
+ 828 04e2 04       	        .byte   4
+ 829 04e3 46494C4C 	        .ascii  "FILL"
+ 830 04e7 00       	        .balign 4
+ 831 04e8 D2040000 	        .word   __w_exit
+ 832              	__c_fill:
+ 833 04ec F1040000 	        .word   .+5
+ 834 04f0 FEE7     	        b       next
+ 835              	        
+ 836              	
+ 837              	__w_find:                                       // ( c-addr -- c-addr 0 | xt 1 | xt -1 )
+ 838 04f2 04       	        .byte   4
+ 839 04f3 46494E44 	        .ascii  "FIND"
+ 840 04f7 00       	        .balign 4
+ 841 04f8 E2040000 	        .word   __w_fill
+ 842              	__c_find:
+ 843 04fc 01050000 	        .word   .+5
+ 844 0500 FEE7     	        b       next
+ 845              	        
+ 846              	
+ 847              	__w_f_m_slash_mod:                              // ( d1 n1 -- n2 n3 )
+ 848 0502 06       	        .byte   6
+ 849 0503 464D2F4D 	        .ascii  "FM/MOD"
+ 849      4F44
+ 850 0509 00C046   	        .balign 4
+ 851 050c F2040000 	        .word   __w_find
+ 852              	__c_f_m_slash_mod:
+ 853 0510 15050000 	        .word   .+5
+ 854 0514 FEE7     	        b       next
+ 855              	        
+ARM GAS  /tmp/ccrnNWhi.s 			page 17
+
+
+ 856              	
+ 857              	__w_here:                                       // ( -- addr )
+ 858 0516 04       	        .byte    4
+ 859 0517 48455245 		.ascii   "HERE"
+ 860 051b 00       	        .balign 4
+ 861 051c 02050000 		.word __w_f_m_slash_mod
+ 862              	__c_here:       
+ 863 0520 25050000 		.word .+5
+ 864 0524 FEE7     	        b      next
+ 865              		
+ 866              	
+ 867              	__w_hold:                                       @ ( char -- )
+ 868 0526 04       	        .byte   4
+ 869 0527 484F4C44 	        .ascii  "HOLD"
+ 870 052b 00       	        .balign 4
+ 871 052c 16050000 	        .word   __w_here
+ 872              	__c_hold:
+ 873 0530 35050000 	        .word   .+5
+ 874 0534 FEE7     	        b       next
+ 875              	        
+ 876              	
+ 877              	__w_i:                                          // ( -- n|u ) ( R: loop-sys -- loop-sys )
+ 878 0536 01       	        .byte   1
+ 879 0537 49       	        .ascii  "I"
+ 880              	        .balign 4
+ 881 0538 26050000 	        .word   __w_hold
+ 882              	__c_i:
+ 883 053c 41050000 	        .word   .+5
+ 884 0540 FEE7     	        b       next
+ 885              	        
+ 886              	
+ 887              	__w_if:                                         // ( C: -- orig )
+ 888 0542 02       	        .byte   2
+ 889 0543 4946     	        .ascii  "IF"
+ 890 0545 00C046   	        .balign 4
+ 891 0548 36050000 	        .word   __w_i
+ 892              	__c_if:
+ 893 054c 51050000 	        .word   .+5
+ 894 0550 FEE7     	        b       next
+ 895              	        
+ 896              	
+ 897              	__w_immediate:                                  // ( -- )
+ 898 0552 09       	        .byte 9
+ 899 0553 494D4D45 	        .ascii  "IMMEDIATE"
+ 899      44494154 
+ 899      45
+ 900              	        .balign 4
+ 901 055c 42050000 	        .word   __w_if
+ 902              	__c_immediate:
+ 903 0560 65050000 	        .word   .+5
+ 904 0564 FEE7     	        b       next
+ 905              	        
+ 906              	
+ 907              	__w_invert:                                     // ( x1 -- x2 )
+ 908 0566 06       	        .byte   6
+ 909 0567 494E5645 	        .ascii  "INVERT"
+ 909      5254
+ARM GAS  /tmp/ccrnNWhi.s 			page 18
+
+
+ 910 056d 00C046   	        .balign 4
+ 911 0570 52050000 	        .word   __w_immediate
+ 912              	__c_invert:
+ 913 0574 79050000 	        .word   .+5
+ 914 0578 DB43     	        mvn     TOS, TOS
+ 915 057a FEE7     	        b       next
+ 916              	        
+ 917              	
+ 918              	__w_j:                                          // ( -- n|u ) ( R: loop-sys1 loop-sys2 -- loop-sys1
+ 919 057c 01       	        .byte   1
+ 920 057d 4A       	        .ascii  "J"
+ 921 057e C046     	        .balign 4
+ 922 0580 66050000 	        .word   __w_invert
+ 923              	__c_j:
+ 924 0584 89050000 	        .word   .+5
+ 925 0588 FEE7     	        b       next
+ 926              	        
+ 927              	
+ 928              	__w_key:                                        // ( -- char )
+ 929 058a 03       	        .byte 3
+ 930 058b 4B4559   	        .ascii  "KEY"
+ 931 058e C046     	        .balign 4
+ 932 0590 7C050000 	        .word   __w_j
+ 933              	__c_key:
+ 934 0594 99050000 	        .word   .+5
+ 935 0598 FEE7     	        b       next
+ 936              	        
+ 937              	
+ 938              	__w_leave:                                      // ( -- ) ( R: loop-sys -- )
+ 939 059a 05       	        .byte 5
+ 940 059b 4C454156 	        .ascii  "LEAVE"
+ 940      45
+ 941              	        .balign 4
+ 942 05a0 8A050000 	        .word   __w_key
+ 943              	__c_leave:
+ 944 05a4 A9050000 	        .word   .+5
+ 945 05a8 FEE7     	        b       next
+ 946              	        
+ 947              	
+ 948              	__w_literal:                                    // ( x -- )
+ 949 05aa 07       	        .byte   7
+ 950 05ab 4C495445 	        .ascii  "LITERAL"
+ 950      52414C
+ 951 05b2 C046     	        .balign 4
+ 952 05b4 9A050000 	        .word   __w_leave
+ 953              	__c_literal:
+ 954 05b8 BD050000 	        .word   .+5
+ 955 05bc 08B4     	        push    {TOS}
+ 956 05be 2B68     	        ldr     TOS, [WA]
+ 957 05c0 0235     	        add     WA, #2
+ 958 05c2 FEE7     	        b       next
+ 959              	
+ 960              	__w_loop:                                       // ( C: do-sys -- )
+ 961 05c4 04       	        .byte   4
+ 962 05c5 4C4F4F50 	        .ascii  "LOOP"
+ 963 05c9 00C046   	        .balign 4
+ 964 05cc AA050000 	        .word   __w_literal
+ARM GAS  /tmp/ccrnNWhi.s 			page 19
+
+
+ 965              	__c_loop:
+ 966 05d0 D5050000 	        .word   .+5
+ 967 05d4 FEE7     	        b       next
+ 968              	        
+ 969              	
+ 970              	__w_lshift:                                     // ( x1 u -- x2 )	
+ 971 05d6 06       	        .byte   6
+ 972 05d7 4C534849 	        .ascii  "LSHIFT"
+ 972      4654
+ 973 05dd 00C046   	        .balign 4
+ 974 05e0 C4050000 	        .word   __w_loop
+ 975              	__c_lshift:
+ 976 05e4 E9050000 	        .word   .+5
+ 977 05e8 01BC     	        pop     {r0}
+ 978 05ea 9840     	        lsl     r0, TOS
+ 979 05ec 031C     	        mov     TOS, r0
+ 980 05ee FEE7     	        b       next
+ 981              	        
+ 982              	
+ 983              	__w_m_star:                                     // ( n1 n2 -- d )
+ 984 05f0 02       	        .byte   2
+ 985 05f1 4D2A     	        .ascii  "M*"
+ 986 05f3 00       	        .balign 4
+ 987 05f4 D6050000 	        .word   __w_lshift
+ 988              	__c_m_star:
+ 989 05f8 FD050000 	        .word   .+5
+ 990 05fc FEE7     	        b       next
+ 991              	        
+ 992              	
+ 993              	__w_max:                                        // ( n1 n2 -- n3 )
+ 994 05fe 03       	        .byte   3
+ 995 05ff 4D4158   	        .ascii  "MAX"
+ 996 0602 C046     	        .balign 4
+ 997 0604 F0050000 	        .word   __w_m_star
+ 998              	__c_max:
+ 999 0608 0D060000 	        .word   .+5
+ 1000 060c FEE7     	        b       next
+ 1001              	        
+ 1002              	
+ 1003              	__w_min:                                        // ( n1 n2 -- n3 )
+ 1004              	        .byte
+ 1005 060e 4D494E   	        .ascii  "MIN"
+ 1006 0611 00C046   	        .balign 4
+ 1007 0614 FE050000 	        .word   __w_max
+ 1008              	__c_min:
+ 1009 0618 1D060000 	        .word   .+5
+ 1010 061c FEE7     	        b       next
+ 1011              	        
+ 1012              	
+ 1013              	__w_mod:                                        // ( n1 n2 -- n3 )
+ 1014 061e 03       	        .byte   3
+ 1015 061f 4D4F44   	        .ascii  "MOD"
+ 1016 0622 C046     	        .balign 4
+ 1017 0624 0E060000 	        .word   __w_min
+ 1018              	__c_mod:
+ 1019 0628 2D060000 	        .word   .+5
+ 1020 062c FEE7     	        b       next
+ARM GAS  /tmp/ccrnNWhi.s 			page 20
+
+
+ 1021              	        
+ 1022              	
+ 1023              	__w_move:                                       // ( addr1 addr2 u -- )
+ 1024 062e 04       		.byte   4
+ 1025 062f 4D4F5645 	        .ascii  "MOVE"
+ 1026 0633 00       	        .balign 4
+ 1027 0634 1E060000 	        .word   __w_mod
+ 1028              	__c_move:
+ 1029 0638 3D060000 	        .word   .+5
+ 1030 063c FEE7     	        b       next
+ 1031              	        
+ 1032              	
+ 1033              	__w_negate:                                     // ( n1 -- n2 )
+ 1034 063e 06       		.byte   6
+ 1035 063f 4E454741 	        .ascii  "NEGATE"
+ 1035      5445
+ 1036 0645 00C046   	        .balign 4
+ 1037 0648 2E060000 	        .word   __w_move
+ 1038              	__c_negate:
+ 1039 064c 51060000 	        .word   .+5
+ 1040 0650 DB43     	        mvn     TOS, TOS
+ 1041 0652 0133     	        add     TOS, #1
+ 1042 0654 FEE7     	        b       next
+ 1043              	        
+ 1044              	
+ 1045              	__w_or:	                                        // ( x1 x2 -- x3 )
+ 1046 0656 02       	        .byte   2
+ 1047 0657 4F52     	        .ascii  "OR"
+ 1048 0659 00C046   	        .balign 4
+ 1049 065c 3E060000 	        .word   __w_negate
+ 1050              	__c_or:
+ 1051 0660 65060000 	        .word   .+5
+ 1052 0664 01BC     	        pop     {r0}
+ 1053 0666 0343     	        orr      TOS, r0
+ 1054 0668 FEE7     	        b       next
+ 1055              	        
+ 1056              	
+ 1057              	__w_over:                                       // ( x1 x2 -- x1 x2 x1 )
+ 1058 066a 04       		.byte   4
+ 1059 066b 4F564552 	        .ascii  "OVER"
+ 1060 066f 00       	        .balign 4
+ 1061 0670 56060000 	        .word   __w_or
+ 1062              	__c_over:
+ 1063 0674 79060000 	        .word   .+5
+ 1064 0678 08B4     	        push    {TOS}
+ 1065 067a 019B     	        ldr     TOS, [SP, #4]
+ 1066 067c FEE7     	        b       next
+ 1067              	
+ 1068              	        
+ 1069              	__w_postpone:                                   // ( "<spaces>name" -- )
+ 1070 067e 08       		.byte   8
+ 1071 067f 504F5354 	        .ascii  "POSTPONE"
+ 1071      504F4E45 
+ 1072 0687 00       	        .balign 4
+ 1073 0688 6A060000 	        .word   __w_over
+ 1074              	__c_postpone:
+ 1075 068c 91060000 	        .word   .+5
+ARM GAS  /tmp/ccrnNWhi.s 			page 21
+
+
+ 1076 0690 FEE7     	        b       next
+ 1077              	        
+ 1078              	
+ 1079              	__w_quit:                                       // ( -- ) ( R: i*x -- )
+ 1080 0692 04       		.byte   4
+ 1081 0693 51554954 	        .ascii  "QUIT"
+ 1082 0697 00       	        .balign 4
+ 1083 0698 7E060000 	        .word   __w_postpone
+ 1084              	__c_quit:
+ 1085 069c A1060000 	        .word   .+5
+ 1086 06a0 FEE7     	        b       next
+ 1087              	        
+ 1088              	
+ 1089              	__w_r_from:                                     // ( -- x ) ( R: x -- )
+ 1090 06a2 02       		.byte 2
+ 1091 06a3 523E     		.ascii "R>"
+ 1092 06a5 00C046   	        .balign 4
+ 1093 06a8 92060000 	        .word   __w_quit
+ 1094              	__c_r_from:
+ 1095 06ac B1060000 	        .word   .+5
+ 1096 06b0 FEE7     	        b       next
+ 1097              	        
+ 1098              	
+ 1099              	__w_r_fetch:                                    // ( -- x ) ( R: x -- x )
+ 1100 06b2 02       		.byte 2
+ 1101 06b3 5240     		.ascii "R@"
+ 1102 06b5 00C046   	        .balign 4
+ 1103 06b8 A2060000 	        .word   __w_r_from
+ 1104              	__c_r_fetch:
+ 1105 06bc C1060000 	        .word   .+5
+ 1106 06c0 FEE7     	        b       next
+ 1107              	        
+ 1108              	
+ 1109              	__w_recurse:                                    // ( -- )
+ 1110 06c2 07       		.byte   7
+ 1111 06c3 52454355 	        .ascii  "RECURSE"
+ 1111      525345
+ 1112 06ca C046     	        .balign 4
+ 1113 06cc B2060000 	        .word   __w_r_fetch
+ 1114              	__c_recurse:
+ 1115 06d0 D5060000 	        .word   .+5
+ 1116 06d4 FEE7     	        b       next
+ 1117              	        
+ 1118              	
+ 1119              	__w_repeat:                                     // ( C: orig dest -- ) ( -- )
+ 1120 06d6 06       		.byte   6
+ 1121 06d7 52455045 	        .ascii  "REPEAT"
+ 1121      4154
+ 1122 06dd 00C046   	        .balign 4
+ 1123 06e0 C2060000 	        .word   __w_recurse
+ 1124              	__c_repeat:
+ 1125 06e4 E9060000 	        .word   .+5
+ 1126 06e8 FEE7     	        b       next
+ 1127              	        
+ 1128              	
+ 1129              	__w_rot:                                        // ( x1 x2 x3 -- x2 x3 x1 )
+ 1130 06ea 03       		.byte   3
+ARM GAS  /tmp/ccrnNWhi.s 			page 22
+
+
+ 1131 06eb 524F54   	        .ascii  "ROT"
+ 1132 06ee C046     	        .balign 4
+ 1133 06f0 D6060000 	        .word   __w_repeat
+ 1134              	__c_rot:
+ 1135 06f4 F9060000 	        .word   .+5
+ 1136 06f8 FEE7     	        b       next
+ 1137              	        
+ 1138              	
+ 1139              	__w_r_shift:                                    // ( x1 u -- x2 )
+ 1140 06fa 06       		.byte   6
+ 1141 06fb 52534849 	        .ascii  "RSHIFT"
+ 1141      4654
+ 1142 0701 00C046   	        .balign 4
+ 1143 0704 EA060000 	        .word   __w_rot
+ 1144              	__c_r_shift:
+ 1145 0708 0D070000 	        .word   .+5
+ 1146 070c 01BC     	        pop     {r0}
+ 1147 070e C340     	        lsr     TOS, TOS, r0
+ 1148 0710 FEE7     	        b       next
+ 1149              	        
+ 1150              	
+ 1151              	__w_s_quote:                                    // ( "ccc<quote>" -- ) ( -- c-addr u )
+ 1152 0712 02       		.byte   2
+ 1153 0713 5322     	        .ascii  "S\""
+ 1154 0715 00C046   	        .balign 4
+ 1155 0718 FA060000 	        .word   __w_r_shift
+ 1156              	__c_s_quote:
+ 1157 071c 21070000 	        .word   .+5
+ 1158 0720 FEE7     	        b       next
+ 1159              	        
+ 1160              	
+ 1161              	__w_s_to_d:                                     // ( n -- d )
+ 1162 0722 03       		.byte   3
+ 1163 0723 533E44   	        .ascii  "S>D"
+ 1164 0726 C046     	        .balign 4
+ 1165 0728 12070000 	        .word   __w_s_quote
+ 1166              	__c_s_to_d:
+ 1167 072c 31070000 	        .word   .+5
+ 1168 0730 FEE7     	        b       next
+ 1169              	        
+ 1170              	
+ 1171              	__w_sign:                                       // ( n -- )
+ 1172 0732 04       		.byte   4
+ 1173 0733 5349474E 	        .ascii  "SIGN"
+ 1174 0737 00       	        .balign 4
+ 1175 0738 22070000 	        .word   __w_s_to_d
+ 1176              	__c_sign:
+ 1177 073c 41070000 	        .word   .+5
+ 1178 0740 FEE7     	        b       next
+ 1179              	        
+ 1180              	
+ 1181              	__w_s_m_slash_rem:                              // ( d1 n1 -- n2 n3 )
+ 1182 0742 06       		.byte   6
+ 1183 0743 534D2F52 	        .ascii  "SM/REM"
+ 1183      454D
+ 1184 0749 00C046   	        .balign 4
+ 1185 074c 32070000 	        .word   __w_sign
+ARM GAS  /tmp/ccrnNWhi.s 			page 23
+
+
+ 1186              	__c_s_m_slash_rem:
+ 1187 0750 55070000 	        .word   .+5
+ 1188 0754 FEE7     	        b       next
+ 1189              	        
+ 1190              	
+ 1191              	__w_source:                                     // ( -- c-addr u )
+ 1192 0756 06       		.byte   6
+ 1193 0757 534F5552 	        .ascii  "SOURCE"
+ 1193      4345
+ 1194 075d 00C046   	        .balign 4
+ 1195 0760 42070000 	        .word   __w_s_m_slash_rem
+ 1196              	__c_source:
+ 1197 0764 69070000 	        .word   .+5
+ 1198 0768 FEE7     	        b       next
+ 1199              	        
+ 1200              	
+ 1201              	__w_space:                                      // ( -- )
+ 1202 076a 05       		.byte   5
+ 1203 076b 53504143 	        .ascii  "SPACE"
+ 1203      45
+ 1204              	        .balign 4
+ 1205 0770 56070000 	        .word   __w_source
+ 1206              	__c_space:
+ 1207 0774 79070000 	        .word   .+5
+ 1208 0778 FEE7     	        b       next
+ 1209              	        
+ 1210              	
+ 1211              	__w_spaces:                                     // ( n -- )
+ 1212 077a 06       		.byte   6
+ 1213 077b 53504143 	        .ascii  "SPACES"
+ 1213      4553
+ 1214 0781 00C046   	        .balign 4
+ 1215 0784 6A070000 	        .word   __w_space
+ 1216              	__c_spaces:
+ 1217 0788 8D070000 	        .word   .+5
+ 1218 078c FEE7     	        b       next
+ 1219              	        
+ 1220              	
+ 1221              	__w_state:                                      // ( -- a-addr )
+ 1222 078e 05       		.byte   5
+ 1223 078f 53544154 	        .ascii  "STATE"
+ 1223      45
+ 1224              	        .balign 4
+ 1225 0794 7A070000 	        .word   __w_spaces
+ 1226              	__c_state:
+ 1227 0798 9D070000 	        .word   .+5
+ 1228 079c 08B4     	        push    {TOS}
+ 1229 079e 4A4B     	        ldr     TOS, =sys_state
+ 1230 07a0 FEE7     	        b       next
+ 1231              	        
+ 1232              	
+ 1233              	__w_swap:                                       // ( x1 x2 -- x2 x1 )
+ 1234 07a2 04       		.byte   4
+ 1235 07a3 53574150 	        .ascii  "SWAP"
+ 1236 07a7 00       	        .balign 4
+ 1237 07a8 8E070000 	        .word   __w_state
+ 1238              	__c_swap:
+ARM GAS  /tmp/ccrnNWhi.s 			page 24
+
+
+ 1239 07ac B1070000 	        .word   .+5
+ 1240 07b0 01BC     	        pop     {r0}
+ 1241 07b2 08B4     	        push    {TOS}
+ 1242 07b4 031C     	        mov     TOS, r0
+ 1243 07b6 FEE7     	        b       next
+ 1244              	        
+ 1245              	
+ 1246              	__w_then:                                       // ( C: orig -- ) ( -- )
+ 1247 07b8 04       		.byte   4
+ 1248 07b9 5448454E 	        .ascii  "THEN"
+ 1249 07bd 00C046   	        .balign 4
+ 1250 07c0 A2070000 	        .word   __w_swap
+ 1251              	__c_then:
+ 1252 07c4 C9070000 	        .word   .+5
+ 1253 07c8 FEE7     	        b       next
+ 1254              	        
+ 1255              	
+ 1256              	__w_type:                                       // ( c-addr u -- )
+ 1257 07ca 04       		.byte   4
+ 1258 07cb 54595045 	        .ascii  "TYPE"
+ 1259 07cf 00       	        .balign 4
+ 1260 07d0 B8070000 	        .word   __w_then
+ 1261              	__c_type:
+ 1262 07d4 D9070000 	        .word   .+5
+ 1263 07d8 FEE7     	        b       next
+ 1264              	        
+ 1265              	
+ 1266              	__w_u_dot:                                      // ( u -- )
+ 1267 07da 02       		.byte   2
+ 1268 07db 552E     	        .ascii  "U."
+ 1269 07dd 00C046   	        .balign 4
+ 1270 07e0 CA070000 	        .word   __w_type
+ 1271              	__c_u_dot:
+ 1272 07e4 E9070000 	        .word   .+5
+ 1273 07e8 FEE7     	        b       next
+ 1274              	        
+ 1275              	
+ 1276              	__w_u_less_than:                                // ( u1 u2 -- flag )
+ 1277 07ea 02       		.byte   2
+ 1278 07eb 553C     	        .ascii  "U<"
+ 1279 07ed 00C046   	        .balign 4
+ 1280 07f0 DA070000 	        .word   __w_u_dot
+ 1281              	__c_u_less_than:
+ 1282 07f4 F9070000 	        .word   .+5
+ 1283 07f8 FEE7     	        b       next
+ 1284              	        
+ 1285              	
+ 1286              	__w_u_m_star:                                   // ( u1 u2 -- ud )
+ 1287 07fa 03       		.byte   3
+ 1288 07fb 554D2A   	        .ascii  "UM*"
+ 1289 07fe C046     	        .balign 4
+ 1290 0800 EA070000 	        .word   __w_u_less_than
+ 1291              	__c_u_m_star:
+ 1292 0804 09080000 	        .word   .+5
+ 1293 0808 FEE7     	        b       next
+ 1294              	        
+ 1295              	
+ARM GAS  /tmp/ccrnNWhi.s 			page 25
+
+
+ 1296              	__w_u_m_slash_mod:                              // ( ud u1 -- u2 u3 )
+ 1297 080a 06       		        .byte   6
+ 1298 080b 554D2F4D 	        .ascii  "UM/MOD"
+ 1298      4F44
+ 1299 0811 00C046   	        .balign 4
+ 1300 0814 FA070000 	        .word   __w_u_m_star
+ 1301              	__c_u_m_slash_mod:
+ 1302 0818 1D080000 	        .word   .+5
+ 1303 081c FEE7     	        b       next
+ 1304              	        
+ 1305              	
+ 1306              	__w_unloop:                                     // ( -- ) ( R: loop-sys )
+ 1307 081e 06       		.byte   6
+ 1308 081f 554E4C4F 	        .ascii  "UNLOOP"
+ 1308      4F50
+ 1309 0825 00C046   	        .balign 4
+ 1310 0828 0A080000 	        .word   __w_u_m_slash_mod
+ 1311              	__c_unloop:
+ 1312 082c 31080000 	        .word   .+5
+ 1313 0830 FEE7     	        b       next
+ 1314              	        
+ 1315              	
+ 1316              	__w_until:                                      // ( C: dest -- ) ( x -- )
+ 1317 0832 05       		.byte   5
+ 1318 0833 554E5449 	        .ascii  "UNTIL"
+ 1318      4C
+ 1319              	        .balign 4
+ 1320 0838 1E080000 	        .word   __w_unloop
+ 1321              	__c_until:
+ 1322 083c 41080000 	        .word   .+5
+ 1323 0840 FEE7     	        b       next
+ 1324              	        
+ 1325              	
+ 1326              	__w_variable:                                   // ( "<spaces>name" -- )
+ 1327 0842 08       		.byte   8
+ 1328 0843 56415249 	        .ascii  "VARIABLE"
+ 1328      41424C45 
+ 1329 084b 00       	        .balign 4
+ 1330 084c 32080000 	        .word   __w_until
+ 1331              	__c_variable:
+ 1332 0850 55080000 	        .word   .+5
+ 1333 0854 FEE7     	        b       next
+ 1334              	        
+ 1335              	
+ 1336              	__w_while:                                      // ( C: dest -- orig dest )
+ 1337 0856 05       		.byte   5
+ 1338 0857 5748494C 	        .ascii  "WHILE"
+ 1338      45
+ 1339              	        .balign 4
+ 1340 085c 42080000 	        .word   __w_variable
+ 1341              	__c_while:
+ 1342 0860 65080000 	        .word   .+5
+ 1343 0864 FEE7     	        b       next
+ 1344              	        
+ 1345              	
+ 1346              	__w_word:                                       // ( char "<chars>ccc<char>" -- c-addr )
+ 1347 0866 04       		.byte   4
+ARM GAS  /tmp/ccrnNWhi.s 			page 26
+
+
+ 1348 0867 574F5244 	        .ascii  "WORD"
+ 1349 086b 00       	        .balign 4
+ 1350 086c 56080000 	        .word   __w_while
+ 1351              	__c_word:
+ 1352 0870 75080000 	        .word   .+5
+ 1353 0874 FEE7     	        b       next
+ 1354              	        
+ 1355              		
+ 1356              	__w_xor:                                        // ( x1 x2 -- x3 )
+ 1357 0876 03       		.byte   3
+ 1358 0877 584F52   	        .ascii  "XOR"
+ 1359 087a C046     	        .balign 4
+ 1360 087c 66080000 	        .word   __w_word
+ 1361              	__c_xor:
+ 1362 0880 85080000 	        .word   .+5
+ 1363 0884 01BC     	        pop     {r0}
+ 1364 0886 4340     	        eor     TOS, r0
+ 1365 0888 FEE7     	        b       next
+ 1366              	        
+ 1367              	
+ 1368              	__w_left_bracket:                               // ( -- )
+ 1369 088a 01       		.byte 1
+ 1370 088b 5B       	        .ascii  "["
+ 1371              	        .balign 4
+ 1372 088c 76080000 	        .word   __w_xor
+ 1373              	__c_left_bracket:
+ 1374 0890 95080000 	        .word   .+5
+ 1375 0894 FEE7     	        b       next
+ 1376              	        
+ 1377              	
+ 1378              	__w_bracket_tick:                               // ( "<spaces>name" -- )
+ 1379 0896 02       		.byte   2
+ 1380 0897 5B275D   	        .ascii  "[']"
+ 1381 089a C046     	        .balign 4
+ 1382 089c 8A080000 	        .word   __w_left_bracket
+ 1383              	__c_bracket_tick:
+ 1384 08a0 A4080000 	        .word   .+4
+ 1385 08a4 FEE7     	        b       next
+ 1386              	        
+ 1387              	
+ 1388              	__w_bracket_char:                               // ( "<spaces>name" -- )
+ 1389 08a6 06       		.byte   6
+ 1390 08a7 5B434841 	        .ascii  "[CHAR]"
+ 1390      525D
+ 1391 08ad 00C046   	        .balign 4
+ 1392 08b0 96080000 	        .word   __w_bracket_tick
+ 1393              	__c_bracket_char:
+ 1394 08b4 B9080000 	        .word   .+5
+ 1395 08b8 FEE7     	        b       next
+ 1396              	        
+ 1397              	
+ 1398              	        .globl  __w_right_bracket
+ 1399              	        .globl  __c_right_bracket
+ 1400              	__w_right_bracket:                              // ( -- )
+ 1401 08ba 01       		.byte   1
+ 1402 08bb 5D       	        .ascii  "]"
+ 1403              	        .balign 4
+ARM GAS  /tmp/ccrnNWhi.s 			page 27
+
+
+ 1404 08bc A6080000 	        .word   __w_bracket_char
+ 1405              	__c_right_bracket:
+ 1406 08c0 C5080000 	        .word   .+5
+ 1407 08c4 FEE7     	        b       next
+ 1408              	        
+ 1409              	
+ 1410              	
+ 1411 08c6 C046     	        .balign 4
+ 1412              	        
+ 1413 08c8 00000000 		@ core extension words
+ARM GAS  /tmp/ccrnNWhi.s 			page 28
+
+
+DEFINED SYMBOLS
+        dictionary.S:11     .text:00000000 __w_store
+                            .text:00000000 $d
+        dictionary.S:15     .text:00000004 $d
+        dictionary.S:16     .text:00000008 __c_store
+        dictionary.S:18     .text:0000000c $t
+        dictionary.S:25     .text:00000014 __w_number_sign
+        dictionary.S:26     .text:00000014 $d
+        dictionary.S:28     .text:00000016 $t
+        dictionary.S:29     .text:00000018 $d
+        dictionary.S:30     .text:0000001c __c_number_sign
+        dictionary.S:33     .text:00000020 $t
+        dictionary.S:36     .text:00000022 __w_number_sign_greater
+        dictionary.S:37     .text:00000022 $d
+        dictionary.S:40     .text:00000028 $d
+        dictionary.S:41     .text:0000002c __c_number_sign_greater
+        dictionary.S:44     .text:00000030 $t
+        dictionary.S:48     .text:00000032 __w_number_sign_s
+        dictionary.S:49     .text:00000032 $d
+        dictionary.S:52     .text:00000038 $d
+        dictionary.S:53     .text:0000003c __c_number_sign_s
+        dictionary.S:56     .text:00000040 $t
+        dictionary.S:60     .text:00000042 __w_tick
+        dictionary.S:61     .text:00000042 $d
+        dictionary.S:64     .text:00000044 $d
+        dictionary.S:65     .text:00000048 __c_tick
+        dictionary.S:68     .text:0000004c $t
+        dictionary.S:72     .text:0000004e __w_paren
+        dictionary.S:73     .text:0000004e $d
+        dictionary.S:76     .text:00000050 $d
+        dictionary.S:77     .text:00000054 __c_paren
+        dictionary.S:80     .text:00000058 $t
+        dictionary.S:84     .text:0000005a __w_star
+        dictionary.S:85     .text:0000005a $d
+        dictionary.S:88     .text:0000005c $d
+        dictionary.S:89     .text:00000060 __c_star
+        dictionary.S:91     .text:00000064 $t
+        dictionary.S:97     .text:0000006a __w_star_slash
+        dictionary.S:98     .text:0000006a $d
+        dictionary.S:101    .text:00000070 $d
+        dictionary.S:102    .text:00000074 __c_star_slash
+        dictionary.S:107    .text:00000078 __w_star_slash_mod
+        dictionary.S:110    .text:0000007e $t
+        dictionary.S:111    .text:00000080 $d
+        dictionary.S:112    .text:00000084 __c_star_slash_mod
+        dictionary.S:115    .text:00000088 $t
+        dictionary.S:119    .text:0000008a __w_plus
+        dictionary.S:120    .text:0000008a $d
+        dictionary.S:123    .text:0000008c $d
+        dictionary.S:124    .text:00000090 __c_plus
+        dictionary.S:126    .text:00000094 $t
+        dictionary.S:132    .text:0000009a __w_plus_store
+        dictionary.S:133    .text:0000009a $d
+        dictionary.S:136    .text:000000a0 $d
+        dictionary.S:137    .text:000000a4 __c_plus_store
+        dictionary.S:139    .text:000000a8 $t
+        dictionary.S:146    .text:000000b0 __w_plus_loop
+ARM GAS  /tmp/ccrnNWhi.s 			page 29
+
+
+        dictionary.S:147    .text:000000b0 $d
+        dictionary.S:149    .text:000000b6 $t
+        dictionary.S:150    .text:000000b8 $d
+        dictionary.S:151    .text:000000bc __c_plus_loop
+        dictionary.S:154    .text:000000c0 $t
+        dictionary.S:158    .text:000000c2 __w_comma
+        dictionary.S:159    .text:000000c2 $d
+        dictionary.S:162    .text:000000c4 $d
+        dictionary.S:163    .text:000000c8 __c_comma
+        dictionary.S:166    .text:000000cc $t
+        dictionary.S:169    .text:000000ce __w_minus
+        dictionary.S:170    .text:000000ce $d
+        dictionary.S:173    .text:000000d0 $d
+        dictionary.S:174    .text:000000d4 __c_minus
+        dictionary.S:176    .text:000000d8 $t
+        dictionary.S:182    .text:000000de __w_dot
+        dictionary.S:183    .text:000000de $d
+        dictionary.S:186    .text:000000e0 $d
+        dictionary.S:187    .text:000000e4 __c_dot
+        dictionary.S:190    .text:000000e8 $t
+        dictionary.S:194    .text:000000ea __w_dot_quote
+        dictionary.S:195    .text:000000ea $d
+        dictionary.S:198    .text:000000f0 $d
+        dictionary.S:199    .text:000000f4 __c_dot_quote
+        dictionary.S:202    .text:000000f8 $t
+        dictionary.S:206    .text:000000fa __w_slash
+        dictionary.S:207    .text:000000fa $d
+        dictionary.S:210    .text:000000fc $d
+        dictionary.S:211    .text:00000100 __c_slash
+        dictionary.S:214    .text:00000104 $t
+        dictionary.S:218    .text:00000106 __w_slash_mod
+        dictionary.S:219    .text:00000106 $d
+        dictionary.S:222    .text:0000010c $d
+        dictionary.S:223    .text:00000110 __c_slash_mod
+        dictionary.S:226    .text:00000114 $t
+        dictionary.S:230    .text:00000116 __w_zero_less
+        dictionary.S:231    .text:00000116 $d
+        dictionary.S:234    .text:0000011c $d
+        dictionary.S:235    .text:00000120 __c_zero_mod
+        dictionary.S:238    .text:00000124 $t
+        dictionary.S:241    .text:00000126 __w_zero_equals
+        dictionary.S:242    .text:00000126 $d
+        dictionary.S:245    .text:0000012c $d
+        dictionary.S:246    .text:00000130 __c_zero_equals
+        dictionary.S:249    .text:00000134 $t
+        dictionary.S:251    .text:00000136 __w_one_plus
+        dictionary.S:252    .text:00000136 $d
+        dictionary.S:255    .text:0000013c $d
+        dictionary.S:256    .text:00000140 __c_one_plus
+        dictionary.S:258    .text:00000144 $t
+        dictionary.S:262    .text:00000148 __w_one_minus
+        dictionary.S:263    .text:00000148 $d
+        dictionary.S:266    .text:0000014c $d
+        dictionary.S:267    .text:00000150 __c_one_minus
+        dictionary.S:269    .text:00000154 $t
+        dictionary.S:273    .text:00000158 __w_two_store
+        dictionary.S:274    .text:00000158 $d
+ARM GAS  /tmp/ccrnNWhi.s 			page 30
+
+
+        dictionary.S:277    .text:0000015c $d
+        dictionary.S:278    .text:00000160 __c_two_store
+        dictionary.S:281    .text:00000164 $t
+        dictionary.S:284    .text:00000166 __w_two_star
+        dictionary.S:285    .text:00000166 $d
+        dictionary.S:288    .text:0000016c $d
+        dictionary.S:289    .text:00000170 __c_two_star
+        dictionary.S:292    .text:00000174 $t
+        dictionary.S:295    .text:00000176 __w_two_slash
+        dictionary.S:296    .text:00000176 $d
+        dictionary.S:299    .text:0000017c $d
+        dictionary.S:300    .text:00000180 __c_two_slash
+        dictionary.S:302    .text:00000184 $t
+        dictionary.S:305    .text:00000186 __w_two_fetch
+        dictionary.S:306    .text:00000186 $d
+        dictionary.S:309    .text:0000018c $d
+        dictionary.S:310    .text:00000190 __c_two_fetch
+        dictionary.S:312    .text:00000194 $t
+        dictionary.S:315    .text:00000196 __w_two_drop
+        dictionary.S:316    .text:00000196 $d
+        dictionary.S:319    .text:0000019c $d
+        dictionary.S:320    .text:000001a0 __c_two_drop
+        dictionary.S:322    .text:000001a4 $t
+        dictionary.S:325    .text:000001a6 __w_two_dupe
+        dictionary.S:326    .text:000001a6 $d
+        dictionary.S:329    .text:000001ac $d
+        dictionary.S:330    .text:000001b0 __c_two_dupe
+        dictionary.S:332    .text:000001b4 $t
+        dictionary.S:335    .text:000001b6 __w_two_over
+        dictionary.S:336    .text:000001b6 $d
+        dictionary.S:339    .text:000001bc $d
+        dictionary.S:340    .text:000001c0 __c_two_over
+        dictionary.S:342    .text:000001c4 $t
+        dictionary.S:345    .text:000001c6 __w_two_swap
+        dictionary.S:346    .text:000001c6 $d
+        dictionary.S:349    .text:000001cc $d
+        dictionary.S:350    .text:000001d0 __c_two_swap
+        dictionary.S:352    .text:000001d4 $t
+        dictionary.S:355    .text:000001d6 __w_colon
+        dictionary.S:356    .text:000001d6 $d
+        dictionary.S:359    .text:000001d8 $d
+        dictionary.S:360    .text:000001dc __c_colon
+        dictionary.S:362    .text:000001e0 $t
+        dictionary.S:365    .text:000001e2 __w_semicolon
+        dictionary.S:366    .text:000001e2 $d
+        dictionary.S:369    .text:000001e4 $d
+        dictionary.S:370    .text:000001e8 __c_semicolon
+        dictionary.S:372    .text:000001ec $t
+        dictionary.S:375    .text:000001ee __w_less_than
+        dictionary.S:376    .text:000001ee $d
+        dictionary.S:379    .text:000001f0 $d
+        dictionary.S:380    .text:000001f4 __c_less_than
+        dictionary.S:382    .text:000001f8 $t
+        dictionary.S:385    .text:000001fa __w_less_number_sign
+        dictionary.S:386    .text:000001fa $d
+        dictionary.S:389    .text:00000200 $d
+        dictionary.S:390    .text:00000204 __c_less_number_sign
+ARM GAS  /tmp/ccrnNWhi.s 			page 31
+
+
+        dictionary.S:392    .text:00000208 $t
+        dictionary.S:395    .text:0000020a __w_equals
+        dictionary.S:396    .text:0000020a $d
+        dictionary.S:399    .text:0000020c $d
+        dictionary.S:400    .text:00000210 __c_equals
+        dictionary.S:402    .text:00000214 $t
+        dictionary.S:405    .text:00000216 __w_greater_than
+        dictionary.S:406    .text:00000216 $d
+        dictionary.S:409    .text:00000218 $d
+        dictionary.S:410    .text:0000021c __c_greater_than
+        dictionary.S:412    .text:00000220 $t
+        dictionary.S:415    .text:00000222 __w_to_body
+        dictionary.S:416    .text:00000222 $d
+        dictionary.S:419    .text:00000228 $d
+        dictionary.S:420    .text:0000022c __c_to_body
+        dictionary.S:422    .text:00000230 $t
+        dictionary.S:425    .text:00000232 __w_to_in
+        dictionary.S:426    .text:00000232 $d
+        dictionary.S:428    .text:00000236 $t
+        dictionary.S:429    .text:00000238 $d
+        dictionary.S:430    .text:0000023c __c_to_in
+        dictionary.S:432    .text:00000240 $t
+        dictionary.S:435    .text:00000242 __w_to_number
+        dictionary.S:436    .text:00000242 $d
+        dictionary.S:438    .text:0000024a $t
+        dictionary.S:439    .text:0000024c $d
+        dictionary.S:440    .text:00000250 __c_to_number
+        dictionary.S:442    .text:00000254 $t
+        dictionary.S:445    .text:00000256 __w_to_r
+        dictionary.S:446    .text:00000256 $d
+        dictionary.S:449    .text:0000025c $d
+        dictionary.S:450    .text:00000260 __c_to_r
+        dictionary.S:452    .text:00000264 $t
+        dictionary.S:455    .text:00000266 __w_question_dupe
+        dictionary.S:456    .text:00000266 $d
+        dictionary.S:459    .text:0000026c $d
+        dictionary.S:460    .text:00000270 __c_question_dupe
+        dictionary.S:462    .text:00000274 $t
+        dictionary.S:465    .text:00000276 __w_fetch
+        dictionary.S:466    .text:00000276 $d
+        dictionary.S:469    .text:00000278 $d
+        dictionary.S:470    .text:0000027c __c_fetch
+        dictionary.S:472    .text:00000280 $t
+        dictionary.S:475    .text:00000282 __w_abort
+        dictionary.S:476    .text:00000282 $d
+        dictionary.S:479    .text:00000288 $d
+        dictionary.S:480    .text:0000028c __c_abort
+        dictionary.S:482    .text:00000290 $t
+        dictionary.S:485    .text:00000292 __w_abort_quote
+        dictionary.S:486    .text:00000292 $d
+        dictionary.S:489    .text:0000029c $d
+        dictionary.S:490    .text:000002a0 __c_abort_quote
+        dictionary.S:492    .text:000002a4 $t
+        dictionary.S:495    .text:000002a6 __w_abs
+        dictionary.S:496    .text:000002a6 $d
+        dictionary.S:498    .text:000002aa $t
+        dictionary.S:499    .text:000002ac $d
+ARM GAS  /tmp/ccrnNWhi.s 			page 32
+
+
+        dictionary.S:500    .text:000002b0 __c_abs
+        dictionary.S:502    .text:000002b4 $t
+        dictionary.S:505    .text:000002b6 __w_accept
+        dictionary.S:506    .text:000002b6 $d
+        dictionary.S:509    .text:000002c0 $d
+        dictionary.S:510    .text:000002c4 __c_accept
+        dictionary.S:512    .text:000002c8 $t
+        dictionary.S:515    .text:000002ca __w_align
+        dictionary.S:516    .text:000002ca $d
+        dictionary.S:519    .text:000002d0 $d
+        dictionary.S:520    .text:000002d4 __c_align
+        dictionary.S:522    .text:000002d8 $t
+        dictionary.S:525    .text:000002da __w_aligned
+        dictionary.S:526    .text:000002da $d
+        dictionary.S:528    .text:000002e2 $t
+        dictionary.S:529    .text:000002e4 $d
+        dictionary.S:530    .text:000002e8 __c_aligned
+        dictionary.S:532    .text:000002ec $t
+        dictionary.S:535    .text:000002ee __w_allot
+        dictionary.S:536    .text:000002ee $d
+        dictionary.S:539    .text:000002f4 $d
+        dictionary.S:540    .text:000002f8 __c_allot
+        dictionary.S:542    .text:000002fc $t
+        dictionary.S:545    .text:000002fe __w_and
+        dictionary.S:546    .text:000002fe $d
+        dictionary.S:548    .text:00000302 $t
+        dictionary.S:549    .text:00000304 $d
+        dictionary.S:550    .text:00000308 __c_and
+        dictionary.S:552    .text:0000030c $t
+        dictionary.S:555    .text:0000030e __w_base
+        dictionary.S:556    .text:0000030e $d
+        dictionary.S:559    .text:00000314 $d
+        dictionary.S:560    .text:00000318 __c_base
+        dictionary.S:562    .text:0000031c $t
+        dictionary.S:565    .text:0000031e __w_begin
+        dictionary.S:566    .text:0000031e $d
+        dictionary.S:569    .text:00000324 $d
+        dictionary.S:570    .text:00000328 __c_begin
+        dictionary.S:572    .text:0000032c $t
+        dictionary.S:575    .text:0000032e __w_bl
+        dictionary.S:576    .text:0000032e $d
+        dictionary.S:579    .text:00000334 $d
+        dictionary.S:580    .text:00000338 __c_bl
+        dictionary.S:582    .text:0000033c $t
+        dictionary.S:585    .text:0000033e __w_c_store
+        dictionary.S:586    .text:0000033e $d
+        dictionary.S:589    .text:00000344 $d
+        dictionary.S:590    .text:00000348 __c_c_store
+        dictionary.S:592    .text:0000034c $t
+        dictionary.S:595    .text:0000034e __w_c_comma
+        dictionary.S:596    .text:0000034e $d
+        dictionary.S:599    .text:00000354 $d
+        dictionary.S:600    .text:00000358 __c_c_comma
+        dictionary.S:602    .text:0000035c $t
+        dictionary.S:605    .text:0000035e __w_c_fetch
+        dictionary.S:606    .text:0000035e $d
+        dictionary.S:609    .text:00000364 $d
+ARM GAS  /tmp/ccrnNWhi.s 			page 33
+
+
+        dictionary.S:610    .text:00000368 __c_c_fetch
+        dictionary.S:612    .text:0000036c $t
+        dictionary.S:615    .text:0000036e __w_cell_plus
+        dictionary.S:616    .text:0000036e $d
+        dictionary.S:619    .text:00000374 $d
+        dictionary.S:620    .text:00000378 __c_cell_plus
+        dictionary.S:622    .text:0000037c $t
+        dictionary.S:625    .text:0000037e __w_cells
+        dictionary.S:626    .text:0000037e $d
+        dictionary.S:629    .text:00000384 $d
+        dictionary.S:630    .text:00000388 __c_cells
+        dictionary.S:632    .text:0000038c $t
+        dictionary.S:636    .text:00000390 __w_char
+        dictionary.S:637    .text:00000390 $d
+        dictionary.S:640    .text:00000398 $d
+        dictionary.S:641    .text:0000039c __c_char
+        dictionary.S:643    .text:000003a0 $t
+        dictionary.S:646    .text:000003a2 __w_char_plus
+        dictionary.S:647    .text:000003a2 $d
+        dictionary.S:650    .text:000003a8 $d
+        dictionary.S:651    .text:000003ac __c_char_plus
+        dictionary.S:653    .text:000003b0 $t
+        dictionary.S:655    .text:000003b2 __w_chars
+        dictionary.S:656    .text:000003b2 $d
+        dictionary.S:659    .text:000003b8 $d
+        dictionary.S:660    .text:000003bc __c_chars
+        dictionary.S:662    .text:000003c0 $t
+        dictionary.S:665    .text:000003c2 __w_constant
+        dictionary.S:666    .text:000003c2 $d
+        dictionary.S:669    .text:000003cc $d
+        dictionary.S:670    .text:000003d0 __c_constant
+        dictionary.S:672    .text:000003d4 $t
+        dictionary.S:675    .text:000003d6 __w_count
+        dictionary.S:676    .text:000003d6 $d
+        dictionary.S:679    .text:000003dc $d
+        dictionary.S:680    .text:000003e0 __c_count
+        dictionary.S:682    .text:000003e4 $t
+        dictionary.S:685    .text:000003e6 __w_cr
+        dictionary.S:686    .text:000003e6 $d
+        dictionary.S:689    .text:000003ec $d
+        dictionary.S:690    .text:000003f0 __c_cr
+        dictionary.S:692    .text:000003f4 $t
+        dictionary.S:695    .text:000003f6 __w_create
+        dictionary.S:696    .text:000003f6 $d
+        dictionary.S:699    .text:00000400 $d
+        dictionary.S:700    .text:00000404 __c_create
+        dictionary.S:702    .text:00000408 $t
+        dictionary.S:705    .text:0000040a __w_decimal
+        dictionary.S:706    .text:0000040a $d
+        dictionary.S:708    .text:00000412 $t
+        dictionary.S:709    .text:00000414 $d
+        dictionary.S:710    .text:00000418 __c_decimal
+        dictionary.S:712    .text:0000041c $t
+        dictionary.S:715    .text:0000041e __w_depth
+        dictionary.S:716    .text:0000041e $d
+        dictionary.S:719    .text:00000424 $d
+        dictionary.S:720    .text:00000428 __c_depth
+ARM GAS  /tmp/ccrnNWhi.s 			page 34
+
+
+        dictionary.S:722    .text:0000042c $t
+        dictionary.S:725    .text:0000042e __w_do
+        dictionary.S:726    .text:0000042e $d
+        dictionary.S:729    .text:00000434 $d
+        dictionary.S:730    .text:00000438 __c_do
+        dictionary.S:732    .text:0000043c $t
+        dictionary.S:735    .text:0000043e __w_does
+        dictionary.S:736    .text:0000043e $d
+        dictionary.S:739    .text:00000444 $d
+        dictionary.S:740    .text:00000448 __c_does
+        dictionary.S:742    .text:0000044c $t
+        dictionary.S:745    .text:0000044e __w_drop
+        dictionary.S:746    .text:0000044e $d
+        dictionary.S:749    .text:00000454 $d
+        dictionary.S:750    .text:00000458 __c_drop
+        dictionary.S:752    .text:0000045c $t
+        dictionary.S:756    .text:00000460 __w_dupe
+        dictionary.S:757    .text:00000460 $d
+        dictionary.S:760    .text:00000464 $d
+        dictionary.S:761    .text:00000468 __c_dupe
+        dictionary.S:763    .text:0000046c $t
+        dictionary.S:767    .text:00000470 __w_else
+        dictionary.S:768    .text:00000470 $d
+        dictionary.S:771    .text:00000478 $d
+        dictionary.S:772    .text:0000047c __c_else
+        dictionary.S:774    .text:00000480 $t
+        dictionary.S:777    .text:00000482 __w_emit
+        dictionary.S:778    .text:00000482 $d
+        dictionary.S:781    .text:00000488 $d
+        dictionary.S:782    .text:0000048c __c_emit
+        dictionary.S:784    .text:00000490 $t
+        dictionary.S:787    .text:00000492 __w_environment_query
+        dictionary.S:788    .text:00000492 $d
+        dictionary.S:791    .text:000004a0 $d
+        dictionary.S:792    .text:000004a4 __c_environment_query
+        dictionary.S:794    .text:000004a8 $t
+        dictionary.S:797    .text:000004aa __w_evaluate
+        dictionary.S:798    .text:000004aa $d
+        dictionary.S:801    .text:000004b4 $d
+        dictionary.S:802    .text:000004b8 __c_evaluate
+        dictionary.S:804    .text:000004bc $t
+        dictionary.S:807    .text:000004be __w_execute
+        dictionary.S:808    .text:000004be $d
+        dictionary.S:810    .text:000004c6 $t
+        dictionary.S:811    .text:000004c8 $d
+        dictionary.S:812    .text:000004cc __c_execute
+        dictionary.S:814    .text:000004d0 $t
+        dictionary.S:817    .text:000004d2 __w_exit
+        dictionary.S:818    .text:000004d2 $d
+        dictionary.S:821    .text:000004d8 $d
+        dictionary.S:822    .text:000004dc __c_exit
+        dictionary.S:824    .text:000004e0 $t
+        dictionary.S:827    .text:000004e2 __w_fill
+        dictionary.S:828    .text:000004e2 $d
+        dictionary.S:831    .text:000004e8 $d
+        dictionary.S:832    .text:000004ec __c_fill
+        dictionary.S:834    .text:000004f0 $t
+ARM GAS  /tmp/ccrnNWhi.s 			page 35
+
+
+        dictionary.S:837    .text:000004f2 __w_find
+        dictionary.S:838    .text:000004f2 $d
+        dictionary.S:841    .text:000004f8 $d
+        dictionary.S:842    .text:000004fc __c_find
+        dictionary.S:844    .text:00000500 $t
+        dictionary.S:847    .text:00000502 __w_f_m_slash_mod
+        dictionary.S:848    .text:00000502 $d
+        dictionary.S:851    .text:0000050c $d
+        dictionary.S:852    .text:00000510 __c_f_m_slash_mod
+        dictionary.S:854    .text:00000514 $t
+        dictionary.S:857    .text:00000516 __w_here
+        dictionary.S:858    .text:00000516 $d
+        dictionary.S:861    .text:0000051c $d
+        dictionary.S:862    .text:00000520 __c_here
+        dictionary.S:864    .text:00000524 $t
+        dictionary.S:867    .text:00000526 __w_hold
+        dictionary.S:868    .text:00000526 $d
+        dictionary.S:871    .text:0000052c $d
+        dictionary.S:872    .text:00000530 __c_hold
+        dictionary.S:874    .text:00000534 $t
+        dictionary.S:877    .text:00000536 __w_i
+        dictionary.S:878    .text:00000536 $d
+        dictionary.S:881    .text:00000538 $d
+        dictionary.S:882    .text:0000053c __c_i
+        dictionary.S:884    .text:00000540 $t
+        dictionary.S:887    .text:00000542 __w_if
+        dictionary.S:888    .text:00000542 $d
+        dictionary.S:891    .text:00000548 $d
+        dictionary.S:892    .text:0000054c __c_if
+        dictionary.S:894    .text:00000550 $t
+        dictionary.S:897    .text:00000552 __w_immediate
+        dictionary.S:898    .text:00000552 $d
+        dictionary.S:901    .text:0000055c $d
+        dictionary.S:902    .text:00000560 __c_immediate
+        dictionary.S:904    .text:00000564 $t
+        dictionary.S:907    .text:00000566 __w_invert
+        dictionary.S:908    .text:00000566 $d
+        dictionary.S:911    .text:00000570 $d
+        dictionary.S:912    .text:00000574 __c_invert
+        dictionary.S:914    .text:00000578 $t
+        dictionary.S:918    .text:0000057c __w_j
+        dictionary.S:919    .text:0000057c $d
+        dictionary.S:921    .text:0000057e $t
+        dictionary.S:922    .text:00000580 $d
+        dictionary.S:923    .text:00000584 __c_j
+        dictionary.S:925    .text:00000588 $t
+        dictionary.S:928    .text:0000058a __w_key
+        dictionary.S:929    .text:0000058a $d
+        dictionary.S:931    .text:0000058e $t
+        dictionary.S:932    .text:00000590 $d
+        dictionary.S:933    .text:00000594 __c_key
+        dictionary.S:935    .text:00000598 $t
+        dictionary.S:938    .text:0000059a __w_leave
+        dictionary.S:939    .text:0000059a $d
+        dictionary.S:942    .text:000005a0 $d
+        dictionary.S:943    .text:000005a4 __c_leave
+        dictionary.S:945    .text:000005a8 $t
+ARM GAS  /tmp/ccrnNWhi.s 			page 36
+
+
+        dictionary.S:948    .text:000005aa __w_literal
+        dictionary.S:949    .text:000005aa $d
+        dictionary.S:951    .text:000005b2 $t
+        dictionary.S:952    .text:000005b4 $d
+        dictionary.S:953    .text:000005b8 __c_literal
+        dictionary.S:955    .text:000005bc $t
+        dictionary.S:960    .text:000005c4 __w_loop
+        dictionary.S:961    .text:000005c4 $d
+        dictionary.S:964    .text:000005cc $d
+        dictionary.S:965    .text:000005d0 __c_loop
+        dictionary.S:967    .text:000005d4 $t
+        dictionary.S:970    .text:000005d6 __w_lshift
+        dictionary.S:971    .text:000005d6 $d
+        dictionary.S:974    .text:000005e0 $d
+        dictionary.S:975    .text:000005e4 __c_lshift
+        dictionary.S:977    .text:000005e8 $t
+        dictionary.S:983    .text:000005f0 __w_m_star
+        dictionary.S:984    .text:000005f0 $d
+        dictionary.S:987    .text:000005f4 $d
+        dictionary.S:988    .text:000005f8 __c_m_star
+        dictionary.S:990    .text:000005fc $t
+        dictionary.S:993    .text:000005fe __w_max
+        dictionary.S:994    .text:000005fe $d
+        dictionary.S:996    .text:00000602 $t
+        dictionary.S:997    .text:00000604 $d
+        dictionary.S:998    .text:00000608 __c_max
+        dictionary.S:1000   .text:0000060c $t
+        dictionary.S:1003   .text:0000060e __w_min
+        dictionary.S:1005   .text:0000060e $d
+        dictionary.S:1007   .text:00000614 $d
+        dictionary.S:1008   .text:00000618 __c_min
+        dictionary.S:1010   .text:0000061c $t
+        dictionary.S:1013   .text:0000061e __w_mod
+        dictionary.S:1014   .text:0000061e $d
+        dictionary.S:1016   .text:00000622 $t
+        dictionary.S:1017   .text:00000624 $d
+        dictionary.S:1018   .text:00000628 __c_mod
+        dictionary.S:1020   .text:0000062c $t
+        dictionary.S:1023   .text:0000062e __w_move
+        dictionary.S:1024   .text:0000062e $d
+        dictionary.S:1027   .text:00000634 $d
+        dictionary.S:1028   .text:00000638 __c_move
+        dictionary.S:1030   .text:0000063c $t
+        dictionary.S:1033   .text:0000063e __w_negate
+        dictionary.S:1034   .text:0000063e $d
+        dictionary.S:1037   .text:00000648 $d
+        dictionary.S:1038   .text:0000064c __c_negate
+        dictionary.S:1040   .text:00000650 $t
+        dictionary.S:1045   .text:00000656 __w_or
+        dictionary.S:1046   .text:00000656 $d
+        dictionary.S:1049   .text:0000065c $d
+        dictionary.S:1050   .text:00000660 __c_or
+        dictionary.S:1052   .text:00000664 $t
+        dictionary.S:1057   .text:0000066a __w_over
+        dictionary.S:1058   .text:0000066a $d
+        dictionary.S:1061   .text:00000670 $d
+        dictionary.S:1062   .text:00000674 __c_over
+ARM GAS  /tmp/ccrnNWhi.s 			page 37
+
+
+        dictionary.S:1064   .text:00000678 $t
+        dictionary.S:1069   .text:0000067e __w_postpone
+        dictionary.S:1070   .text:0000067e $d
+        dictionary.S:1073   .text:00000688 $d
+        dictionary.S:1074   .text:0000068c __c_postpone
+        dictionary.S:1076   .text:00000690 $t
+        dictionary.S:1079   .text:00000692 __w_quit
+        dictionary.S:1080   .text:00000692 $d
+        dictionary.S:1083   .text:00000698 $d
+        dictionary.S:1084   .text:0000069c __c_quit
+        dictionary.S:1086   .text:000006a0 $t
+        dictionary.S:1089   .text:000006a2 __w_r_from
+        dictionary.S:1090   .text:000006a2 $d
+        dictionary.S:1093   .text:000006a8 $d
+        dictionary.S:1094   .text:000006ac __c_r_from
+        dictionary.S:1096   .text:000006b0 $t
+        dictionary.S:1099   .text:000006b2 __w_r_fetch
+        dictionary.S:1100   .text:000006b2 $d
+        dictionary.S:1103   .text:000006b8 $d
+        dictionary.S:1104   .text:000006bc __c_r_fetch
+        dictionary.S:1106   .text:000006c0 $t
+        dictionary.S:1109   .text:000006c2 __w_recurse
+        dictionary.S:1110   .text:000006c2 $d
+        dictionary.S:1112   .text:000006ca $t
+        dictionary.S:1113   .text:000006cc $d
+        dictionary.S:1114   .text:000006d0 __c_recurse
+        dictionary.S:1116   .text:000006d4 $t
+        dictionary.S:1119   .text:000006d6 __w_repeat
+        dictionary.S:1120   .text:000006d6 $d
+        dictionary.S:1123   .text:000006e0 $d
+        dictionary.S:1124   .text:000006e4 __c_repeat
+        dictionary.S:1126   .text:000006e8 $t
+        dictionary.S:1129   .text:000006ea __w_rot
+        dictionary.S:1130   .text:000006ea $d
+        dictionary.S:1132   .text:000006ee $t
+        dictionary.S:1133   .text:000006f0 $d
+        dictionary.S:1134   .text:000006f4 __c_rot
+        dictionary.S:1136   .text:000006f8 $t
+        dictionary.S:1139   .text:000006fa __w_r_shift
+        dictionary.S:1140   .text:000006fa $d
+        dictionary.S:1143   .text:00000704 $d
+        dictionary.S:1144   .text:00000708 __c_r_shift
+        dictionary.S:1146   .text:0000070c $t
+        dictionary.S:1151   .text:00000712 __w_s_quote
+        dictionary.S:1152   .text:00000712 $d
+        dictionary.S:1155   .text:00000718 $d
+        dictionary.S:1156   .text:0000071c __c_s_quote
+        dictionary.S:1158   .text:00000720 $t
+        dictionary.S:1161   .text:00000722 __w_s_to_d
+        dictionary.S:1162   .text:00000722 $d
+        dictionary.S:1164   .text:00000726 $t
+        dictionary.S:1165   .text:00000728 $d
+        dictionary.S:1166   .text:0000072c __c_s_to_d
+        dictionary.S:1168   .text:00000730 $t
+        dictionary.S:1171   .text:00000732 __w_sign
+        dictionary.S:1172   .text:00000732 $d
+        dictionary.S:1175   .text:00000738 $d
+ARM GAS  /tmp/ccrnNWhi.s 			page 38
+
+
+        dictionary.S:1176   .text:0000073c __c_sign
+        dictionary.S:1178   .text:00000740 $t
+        dictionary.S:1181   .text:00000742 __w_s_m_slash_rem
+        dictionary.S:1182   .text:00000742 $d
+        dictionary.S:1185   .text:0000074c $d
+        dictionary.S:1186   .text:00000750 __c_s_m_slash_rem
+        dictionary.S:1188   .text:00000754 $t
+        dictionary.S:1191   .text:00000756 __w_source
+        dictionary.S:1192   .text:00000756 $d
+        dictionary.S:1195   .text:00000760 $d
+        dictionary.S:1196   .text:00000764 __c_source
+        dictionary.S:1198   .text:00000768 $t
+        dictionary.S:1201   .text:0000076a __w_space
+        dictionary.S:1202   .text:0000076a $d
+        dictionary.S:1205   .text:00000770 $d
+        dictionary.S:1206   .text:00000774 __c_space
+        dictionary.S:1208   .text:00000778 $t
+        dictionary.S:1211   .text:0000077a __w_spaces
+        dictionary.S:1212   .text:0000077a $d
+        dictionary.S:1215   .text:00000784 $d
+        dictionary.S:1216   .text:00000788 __c_spaces
+        dictionary.S:1218   .text:0000078c $t
+        dictionary.S:1221   .text:0000078e __w_state
+        dictionary.S:1222   .text:0000078e $d
+        dictionary.S:1225   .text:00000794 $d
+        dictionary.S:1226   .text:00000798 __c_state
+        dictionary.S:1228   .text:0000079c $t
+        dictionary.S:1233   .text:000007a2 __w_swap
+        dictionary.S:1234   .text:000007a2 $d
+        dictionary.S:1237   .text:000007a8 $d
+        dictionary.S:1238   .text:000007ac __c_swap
+        dictionary.S:1240   .text:000007b0 $t
+        dictionary.S:1246   .text:000007b8 __w_then
+        dictionary.S:1247   .text:000007b8 $d
+        dictionary.S:1250   .text:000007c0 $d
+        dictionary.S:1251   .text:000007c4 __c_then
+        dictionary.S:1253   .text:000007c8 $t
+        dictionary.S:1256   .text:000007ca __w_type
+        dictionary.S:1257   .text:000007ca $d
+        dictionary.S:1260   .text:000007d0 $d
+        dictionary.S:1261   .text:000007d4 __c_type
+        dictionary.S:1263   .text:000007d8 $t
+        dictionary.S:1266   .text:000007da __w_u_dot
+        dictionary.S:1267   .text:000007da $d
+        dictionary.S:1270   .text:000007e0 $d
+        dictionary.S:1271   .text:000007e4 __c_u_dot
+        dictionary.S:1273   .text:000007e8 $t
+        dictionary.S:1276   .text:000007ea __w_u_less_than
+        dictionary.S:1277   .text:000007ea $d
+        dictionary.S:1280   .text:000007f0 $d
+        dictionary.S:1281   .text:000007f4 __c_u_less_than
+        dictionary.S:1283   .text:000007f8 $t
+        dictionary.S:1286   .text:000007fa __w_u_m_star
+        dictionary.S:1287   .text:000007fa $d
+        dictionary.S:1289   .text:000007fe $t
+        dictionary.S:1290   .text:00000800 $d
+        dictionary.S:1291   .text:00000804 __c_u_m_star
+ARM GAS  /tmp/ccrnNWhi.s 			page 39
+
+
+        dictionary.S:1293   .text:00000808 $t
+        dictionary.S:1296   .text:0000080a __w_u_m_slash_mod
+        dictionary.S:1297   .text:0000080a $d
+        dictionary.S:1300   .text:00000814 $d
+        dictionary.S:1301   .text:00000818 __c_u_m_slash_mod
+        dictionary.S:1303   .text:0000081c $t
+        dictionary.S:1306   .text:0000081e __w_unloop
+        dictionary.S:1307   .text:0000081e $d
+        dictionary.S:1310   .text:00000828 $d
+        dictionary.S:1311   .text:0000082c __c_unloop
+        dictionary.S:1313   .text:00000830 $t
+        dictionary.S:1316   .text:00000832 __w_until
+        dictionary.S:1317   .text:00000832 $d
+        dictionary.S:1320   .text:00000838 $d
+        dictionary.S:1321   .text:0000083c __c_until
+        dictionary.S:1323   .text:00000840 $t
+        dictionary.S:1326   .text:00000842 __w_variable
+        dictionary.S:1327   .text:00000842 $d
+        dictionary.S:1330   .text:0000084c $d
+        dictionary.S:1331   .text:00000850 __c_variable
+        dictionary.S:1333   .text:00000854 $t
+        dictionary.S:1336   .text:00000856 __w_while
+        dictionary.S:1337   .text:00000856 $d
+        dictionary.S:1340   .text:0000085c $d
+        dictionary.S:1341   .text:00000860 __c_while
+        dictionary.S:1343   .text:00000864 $t
+        dictionary.S:1346   .text:00000866 __w_word
+        dictionary.S:1347   .text:00000866 $d
+        dictionary.S:1350   .text:0000086c $d
+        dictionary.S:1351   .text:00000870 __c_word
+        dictionary.S:1353   .text:00000874 $t
+        dictionary.S:1356   .text:00000876 __w_xor
+        dictionary.S:1357   .text:00000876 $d
+        dictionary.S:1359   .text:0000087a $t
+        dictionary.S:1360   .text:0000087c $d
+        dictionary.S:1361   .text:00000880 __c_xor
+        dictionary.S:1363   .text:00000884 $t
+        dictionary.S:1368   .text:0000088a __w_left_bracket
+        dictionary.S:1369   .text:0000088a $d
+        dictionary.S:1372   .text:0000088c $d
+        dictionary.S:1373   .text:00000890 __c_left_bracket
+        dictionary.S:1375   .text:00000894 $t
+        dictionary.S:1378   .text:00000896 __w_bracket_tick
+        dictionary.S:1379   .text:00000896 $d
+        dictionary.S:1381   .text:0000089a $t
+        dictionary.S:1382   .text:0000089c $d
+        dictionary.S:1383   .text:000008a0 __c_bracket_tick
+        dictionary.S:1385   .text:000008a4 $t
+        dictionary.S:1388   .text:000008a6 __w_bracket_char
+        dictionary.S:1389   .text:000008a6 $d
+        dictionary.S:1392   .text:000008b0 $d
+        dictionary.S:1393   .text:000008b4 __c_bracket_char
+        dictionary.S:1395   .text:000008b8 $t
+        dictionary.S:1400   .text:000008ba __w_right_bracket
+        dictionary.S:1405   .text:000008c0 __c_right_bracket
+        dictionary.S:1401   .text:000008ba $d
+        dictionary.S:1404   .text:000008bc $d
+ARM GAS  /tmp/ccrnNWhi.s 			page 40
+
+
+        dictionary.S:1407   .text:000008c4 $t
+        dictionary.S:1413   .text:000008c8 $d
+        dictionary.S:39     .text:00000025 $d
+        dictionary.S:39     .text:00000026 $t
+        dictionary.S:51     .text:00000035 $d
+        dictionary.S:51     .text:00000036 $t
+        dictionary.S:100    .text:0000006d $d
+        dictionary.S:100    .text:0000006e $t
+        dictionary.S:135    .text:0000009d $d
+        dictionary.S:135    .text:0000009e $t
+        dictionary.S:197    .text:000000ed $d
+        dictionary.S:197    .text:000000ee $t
+        dictionary.S:221    .text:0000010b $d
+        dictionary.S:233    .text:00000119 $d
+        dictionary.S:233    .text:0000011a $t
+        dictionary.S:244    .text:00000129 $d
+        dictionary.S:244    .text:0000012a $t
+        dictionary.S:254    .text:00000139 $d
+        dictionary.S:254    .text:0000013a $t
+        dictionary.S:265    .text:0000014b $d
+        dictionary.S:276    .text:0000015b $d
+        dictionary.S:287    .text:00000169 $d
+        dictionary.S:287    .text:0000016a $t
+        dictionary.S:298    .text:00000179 $d
+        dictionary.S:298    .text:0000017a $t
+        dictionary.S:308    .text:00000189 $d
+        dictionary.S:308    .text:0000018a $t
+        dictionary.S:328    .text:000001ab $d
+        dictionary.S:388    .text:000001fd $d
+        dictionary.S:388    .text:000001fe $t
+        dictionary.S:448    .text:00000259 $d
+        dictionary.S:448    .text:0000025a $t
+        dictionary.S:458    .text:0000026b $d
+        dictionary.S:488    .text:00000299 $d
+        dictionary.S:488    .text:0000029a $t
+        dictionary.S:508    .text:000002bd $d
+        dictionary.S:508    .text:000002be $t
+        dictionary.S:558    .text:00000313 $d
+        dictionary.S:578    .text:00000331 $d
+        dictionary.S:578    .text:00000332 $t
+        dictionary.S:588    .text:00000341 $d
+        dictionary.S:588    .text:00000342 $t
+        dictionary.S:598    .text:00000351 $d
+        dictionary.S:598    .text:00000352 $t
+        dictionary.S:608    .text:00000361 $d
+        dictionary.S:608    .text:00000362 $t
+        dictionary.S:639    .text:00000395 $d
+        dictionary.S:639    .text:00000396 $t
+        dictionary.S:668    .text:000003cb $d
+        dictionary.S:688    .text:000003e9 $d
+        dictionary.S:688    .text:000003ea $t
+        dictionary.S:698    .text:000003fd $d
+        dictionary.S:698    .text:000003fe $t
+        dictionary.S:728    .text:00000431 $d
+        dictionary.S:728    .text:00000432 $t
+        dictionary.S:748    .text:00000453 $d
+        dictionary.S:770    .text:00000475 $d
+ARM GAS  /tmp/ccrnNWhi.s 			page 41
+
+
+        dictionary.S:770    .text:00000476 $t
+        dictionary.S:780    .text:00000487 $d
+        dictionary.S:790    .text:0000049f $d
+        dictionary.S:800    .text:000004b3 $d
+        dictionary.S:820    .text:000004d7 $d
+        dictionary.S:830    .text:000004e7 $d
+        dictionary.S:840    .text:000004f7 $d
+        dictionary.S:850    .text:00000509 $d
+        dictionary.S:850    .text:0000050a $t
+        dictionary.S:860    .text:0000051b $d
+        dictionary.S:870    .text:0000052b $d
+        dictionary.S:890    .text:00000545 $d
+        dictionary.S:890    .text:00000546 $t
+        dictionary.S:910    .text:0000056d $d
+        dictionary.S:910    .text:0000056e $t
+        dictionary.S:963    .text:000005c9 $d
+        dictionary.S:963    .text:000005ca $t
+        dictionary.S:973    .text:000005dd $d
+        dictionary.S:973    .text:000005de $t
+        dictionary.S:986    .text:000005f3 $d
+        dictionary.S:1006   .text:00000611 $d
+        dictionary.S:1006   .text:00000612 $t
+        dictionary.S:1026   .text:00000633 $d
+        dictionary.S:1036   .text:00000645 $d
+        dictionary.S:1036   .text:00000646 $t
+        dictionary.S:1048   .text:00000659 $d
+        dictionary.S:1048   .text:0000065a $t
+        dictionary.S:1060   .text:0000066f $d
+        dictionary.S:1072   .text:00000687 $d
+        dictionary.S:1082   .text:00000697 $d
+        dictionary.S:1092   .text:000006a5 $d
+        dictionary.S:1092   .text:000006a6 $t
+        dictionary.S:1102   .text:000006b5 $d
+        dictionary.S:1102   .text:000006b6 $t
+        dictionary.S:1122   .text:000006dd $d
+        dictionary.S:1122   .text:000006de $t
+        dictionary.S:1142   .text:00000701 $d
+        dictionary.S:1142   .text:00000702 $t
+        dictionary.S:1154   .text:00000715 $d
+        dictionary.S:1154   .text:00000716 $t
+        dictionary.S:1174   .text:00000737 $d
+        dictionary.S:1184   .text:00000749 $d
+        dictionary.S:1184   .text:0000074a $t
+        dictionary.S:1194   .text:0000075d $d
+        dictionary.S:1194   .text:0000075e $t
+        dictionary.S:1214   .text:00000781 $d
+        dictionary.S:1214   .text:00000782 $t
+        dictionary.S:1236   .text:000007a7 $d
+        dictionary.S:1249   .text:000007bd $d
+        dictionary.S:1249   .text:000007be $t
+        dictionary.S:1259   .text:000007cf $d
+        dictionary.S:1269   .text:000007dd $d
+        dictionary.S:1269   .text:000007de $t
+        dictionary.S:1279   .text:000007ed $d
+        dictionary.S:1279   .text:000007ee $t
+        dictionary.S:1299   .text:00000811 $d
+        dictionary.S:1299   .text:00000812 $t
+ARM GAS  /tmp/ccrnNWhi.s 			page 42
+
+
+        dictionary.S:1309   .text:00000825 $d
+        dictionary.S:1309   .text:00000826 $t
+        dictionary.S:1329   .text:0000084b $d
+        dictionary.S:1349   .text:0000086b $d
+        dictionary.S:1391   .text:000008ad $d
+        dictionary.S:1391   .text:000008ae $t
+
+UNDEFINED SYMBOLS
+store
+next
+sys_state
