@@ -1,0 +1,111 @@
+
+//////////////////////////////////////////////////////////////////////////////
+///  
+///  \file main.c
+///  Copyright 2015 William R Cooke
+///
+///  \brief Fill in brief descripton here
+///
+//////////////////////////////////////////////////////////////////////////////
+
+#include <stdint.h>
+#include "LPC11xx/LPC11xx.h"
+#include "LPC11xx/system_LPC11xx.h"
+#include "LPC11xx/flash.h"
+#include "LPC11xx/systick.h"
+#include "LPC11xx/gpio.h"
+#include "LPC11xx/uart.h"
+#include "LPC11xx/timers.h"
+#include "LPC11xx/adc.h"
+#include "LPC11xx/clock.h"
+#include <stdio.h>
+
+int asm_func(void);
+int asm_parm(int x, int y, int z);
+
+static SysTick_Timer_t systick_timers[4];  // systick timers
+static uint8_t uart_buffer[32] = "Hello World I Love You!";
+uint32_t dly = 1000000;
+
+
+void show(int x)
+{
+  printf("showing %d \n", x);
+}
+
+void emit(uint8_t c)
+{
+  printf("emitting __%c__\n", c);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+///
+///  \b initialize
+///
+///  \brief Sets up all peripherals etc
+///
+//////////////////////////////////////////////////////////////////////////////
+void initialize(void)
+{
+  uint32_t dly = 1000000;
+  //while(1);
+  //uint32_t dly=100000000;
+  GPIO1->DIR = 0xffffffff;
+  GPIO1->DATA = 0;
+ 
+    Flash_SetAccessClocks(48000000);  // set flash to use 48 MHz
+    PLL_Set48();  // initialize clock to 48 MHz, internal 12 MHz osc
+    SysTick_Initialize(100, systick_timers, 4); // interrupt freq, timer array, #timers
+    //UART_Initialize(9600, 0, 8, 1, NULL, 0); // bps, parity, bits, stop, not used, not used
+    GPIO_Initialize();
+   //  I2C_init(100);  // Initialize I2C with slave address (1 to 127)
+   // ADC_init( ADC_Channel_1 | ADC_Channel_2, ADC_Mode_Burst, 0);
+    AHBCLKCTRL_Enable(AHBCLKCTRL_IOCON);  // turn on io configure clock
+   SysTick_Initialize(100,systick_timers,4);
+   UART_Initialize(9600, 0, 8, 1, uart_buffer, 32);
+   //Timer_PWMInitialize(CT16B0, 12, 1000, TIMER_CHANNEL_0);
+   //Timer_PWMSet(CT16B0, TIMER_CHANNEL_0, 500);
+   //IOCON->IOCON_PIO0_8 = PINFN_CT16B0_MAT0 ; 
+
+   //SysTick_SetTimer(1,500,1);  // blink callback timer
+   //  SysTick_Set_Callback(1,blinky);
+   printf("CPU Frequency: %d\n", SystemCoreClock);
+   // _write(1,uart_buffer,16);
+   printf("%d \n", asm_func());
+   printf("%d \n", asm_parm(2,6,10));
+
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+///
+///  \b main
+///
+///  \brief Main entry point of charger
+///
+//////////////////////////////////////////////////////////////////////////////
+
+void main(void)
+{
+  volatile uint32_t dly;
+  uint8_t ch = 100;
+  int c;
+
+  initialize();
+  
+  GPIO1->DIR = 0xffffffff;
+  GPIO1->DATA = 0;
+  dly = 100000;
+  GPIO1->DATA = 0xffffffff;
+  while(dly--);
+  GPIO1->DATA = 0;
+  dly=1000000;
+  while(dly--);
+  //GPIO1->DATA = 0x20;
+
+  while(1);
+}
+
+
+
+

@@ -1,0 +1,32 @@
+/*****************************************************************************
+fortharm  forth for arm cortex m0 (LPC1114)
+copyright(c) 2013 William R Cooke
+*/
+
+	.thumb 
+
+	.equ TIB_BYTES, 128
+	.equ STACK_BYTES, 128
+	.equ RSTACK_BYTES, 64
+	   .equ PAD_BYTES, 128
+	   
+	
+#define NEXT    bx  r12  // Always holds address of next:
+	
+#define PSP         sp
+#define RSP         r7
+#define IR          r6
+#define TOS         r5
+#define WA          r4
+#define CA          r3
+#define SCRATCH0    r2
+#define SCRATCH1    r1
+#define SCRATCH2    r0
+
+#define USERS       r11
+	
+#define SCRATCH3    r8
+#define SCRATCH4    r9
+#define SCRATCH5    r10
+
+#define IMM     (1<<7)

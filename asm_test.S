@@ -1,0 +1,50 @@
+/*****************************************************************************
+asm_test.S
+	test interfacing asm to c for arm cortex
+	copyright (c) 2017 William R Cooke
+	
+copyright(c) 2013 William R Cooke
+*/
+
+
+	.text
+	.balign 4
+	.syntax unified
+	.thumb
+	.thumb_func
+	.global asm_func
+
+        @ some handy constants
+        @ put them here for easy access
+        
+asm_func:
+        @push {lr}
+        @mov r1,r0
+        @add r0,r0               ;
+        @add r0,r1
+        @pop {pc}
+	movs r0, #99
+	bx   lr
+
+
+	.text
+	.balign 4
+	.syntax unified
+	.thumb
+	.thumb_func
+	.global asm_parm
+
+asm_parm:
+	add r0, r1
+	bl show
+	movs r0, #67
+	bl emit
+	bx  lr
+
+
+@forth_start:
+ @       movs    r0,#10          @ set base
+  @      ldr     r1, =sys_base
+  @      str     r0, [r1, 0]
+        
+ 
